@@ -289,6 +289,15 @@ def main():
         cfg = r.get('eval_config', '?')
         print(f"{r.get('model','?'):<12} {r.get('step',0):>6} {r.get('variant','?'):<7} {cfg:<5} {r['subset']:<35} {r['accuracy']:>6.2f}% {r['count']:>5} {ext_pct:>4.0f}%{flag}")
 
+    # Save to CSV
+    out_csv = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'docs', 'rescored_results.csv')
+    out_csv = os.path.normpath(out_csv)
+    df_out = pd.DataFrame(results)
+    col_order = ['model', 'step', 'variant', 'eval_config', 'subset', 'accuracy', 'count', 'extracted', 'path']
+    df_out = df_out[[c for c in col_order if c in df_out.columns]]
+    df_out.to_csv(out_csv, index=False)
+    print(f"\nSaved {len(results)} results to {out_csv}")
+
 
 if __name__ == '__main__':
     main()
