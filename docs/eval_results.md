@@ -170,11 +170,11 @@ Steps/epoch: 606 | s3000 ≈ 5ep, s6000 ≈ 10ep
 |--------|-------------|-----------|-------------|-----------|
 | td_path | 56.77 | 43.98 | running | running |
 | td_path_arrow | 51.50 | 41.80 | running | running |
-| dh_midpoint | 61.11 | 67.28 | 55.56 | 67.90 |
+| dh_midpoint | — | — | 55.56 | 67.90 |
 | SAT_perspective | pending | 57.58 | — | — |
 | Perspective_Arrow | pending | pending | — | — |
 
-> **Note**: MMCoT s6000 dh_midpoint numbers (61.11, 67.28) are from the original eval pipeline and were not re-verified by the rescoring script (files not found in expected location). Since these are PT2P subsets evaluated with `bagel_mot_vcot`, they should not be affected by the substring matching bug.
+> **Note**: MMCoT s6000 dh_midpoint was never evaluated (no xlsx files exist). The old table had 61.11/67.28 but these have no backing data and may have been transcription errors.
 
 ---
 
