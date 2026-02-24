@@ -604,6 +604,8 @@ def main():
     start_time = time()
     logger.info(f"Training for {training_args.total_steps} steps, starting at {train_step}...")
     for curr_step, data in enumerate(train_loader, start=train_step):
+        if curr_step > training_args.total_steps:
+            break
         data = data.cuda(device).to_dict()
         data_indexes = data.pop('batch_data_indexes', None)
         ce_loss_weights = data.pop('ce_loss_weights', None)
@@ -611,6 +613,14 @@ def main():
             if training_args.visual_gen:
                 with torch.no_grad():
                     data['padded_latent'] = vae_model.encode(data.pop('padded_images'))
+            else:
+                # Remove VAE-related keys that the model doesn't expect when visual_gen is off
+                data.pop('padded_images', None)
+                data.pop('patchified_vae_latent_shapes', None)
+                data.pop('packed_latent_position_ids', None)
+                data.pop('packed_vae_token_indexes', None)
+                data.pop('packed_timesteps', None)
+                data.pop('mse_loss_indexes', None)
             loss_dict = fsdp_model(**data)
 
         loss = 0

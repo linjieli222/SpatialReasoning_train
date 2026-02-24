@@ -87,6 +87,11 @@ class UnifiedEditIterableDataset(InterleavedBaseIterableDataset, ParquetStandard
                 return {}
             input_imgs.append(img)
 
+        # Match eval-time KV cache order: system_prompt → images → question text → outputs
+        # instrs[0] = system prompt (before images)
+        # instrs[1] = question text with <img> tags (after images)
+        data = self._add_text(data, instrs[0], need_loss=False)
+
         for img in input_imgs:
             # Input images: enable_cfg=False because we must NOT dropout the input image
             # need_vae controlled by self.enable_vae for pure VLM training support
@@ -99,7 +104,9 @@ class UnifiedEditIterableDataset(InterleavedBaseIterableDataset, ParquetStandard
                 enable_cfg=False,
             )
 
-        data = self._add_text(data, instrs[0], need_loss=False)
+        # Add remaining instruction parts (question text + choices)
+        for i in range(1, len(instrs)):
+            data = self._add_text(data, instrs[i], need_loss=False)
 
         for idx, out_txt in enumerate(outputs):
             # Output text should NOT be dropped - we need to compute loss on it
