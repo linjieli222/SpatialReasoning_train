@@ -17,7 +17,7 @@ Last updated: 2026-02-24
 | dh_midpoint | 33.95 | `/gpfs/scrubbed/krishna/linjli/bagel_eval/tifa_v3_eval_test/bagel_mot/bagel_mot_AI2ThorPT2P_dh_midpoint_acc.csv` |
 | PathTracing | 6.60 | `/gpfs/scrubbed/krishna/linjli/bagel_eval/baseline/bagel_mot/bagel_mot_AI2ThorPathTracing_acc.csv` |
 | PathTracing_sideview | 4.65 | `/gpfs/scrubbed/krishna/linjli/bagel_eval/baseline_PathTracing_sideview/bagel_mot/bagel_mot_AI2ThorPathTracing_sideview_acc.csv` |
-| SAT_perspective | pending (62874) | `/gpfs/scrubbed/linjli/hf_cache/BAGEL-7B-MoT/eval/` |
+| SAT_perspective | 22.73 | `/gpfs/scrubbed/linjli/hf_cache/BAGEL-7B-MoT/eval/` |
 
 > **Note**: PathTracing baseline (6.6%) is artificially low — the `exact_matching` extraction policy fails on the baseline model's verbose `<think>` output (82% of predictions get no answer extracted). The actual model performance when answers are extractable is ~37%.
 
@@ -44,6 +44,7 @@ Config: `bagel_mot` | Base dir: `.../tifa_v3_td_path_answer_only/ao_td_path_8gpu
 | PathTracing | 68.46 | 70.42 | 82.15 | 84.11 | **84.35** |
 | Perspective_Arrow | 88.63 | 70.87 | 78.16 | 80.46 | **83.76** |
 | Perspective_NoArrow | **91.38** | 71.07 | 79.48 | 79.98 | 85.84 |
+| SAT_perspective | — | — | — | 40.91 | — |
 
 ### AO EMA
 
@@ -58,8 +59,8 @@ Config: `bagel_mot` | Base dir: `.../tifa_v3_td_path_answer_only/ao_td_path_8gpu
 | td_ego_dir_arrow | 48.37 | 52.23 | 61.13 | 67.66 | **71.81** |
 | td_ego_side_arrow | 48.60 | 59.22 | 67.32 | 72.91 | **78.49** |
 | PathTracing | 5.62 | 27.38 | 46.70 | 65.53 | **73.11** |
-| Perspective_Arrow | pending (62852) | pending (62779) | pending (62783) | 74.23 | **74.21** |
-| Perspective_NoArrow | pending (62853) | pending (62780) | pending (62784) | **75.19** | 74.38 |
+| Perspective_Arrow | pending (62864) | TIMEOUT | pending (62783) | 74.23 | **74.21** |
+| Perspective_NoArrow | pending (62853) | TIMEOUT | TIMEOUT | **75.19** | 74.38 |
 
 ### AO Result Paths
 
@@ -91,8 +92,9 @@ Config: `bagel_mot` | Base dir: `.../tifa_v3_td_path_text_cot/textcot_td_path_8g
 | td_ego_dir_arrow | 51.34 | **56.97** |
 | td_ego_side_arrow | **67.88** | 65.08 |
 | PathTracing | 67.73 | **70.42** |
-| Perspective_Arrow | 99.73 | pending (62858) |
-| Perspective_NoArrow | 100.00 | pending (62859) |
+| Perspective_Arrow | 99.73 | **99.71** |
+| Perspective_NoArrow | 100.00 | **99.46** |
+| SAT_perspective | 59.09 | — |
 
 ### TextCoT EMA
 
@@ -204,9 +206,23 @@ Eval uses `bagel_mot` with `SAT_perspective` dataset. MCQ evaluation via heurist
 
 | Model | Checkpoint | Accuracy (%) | Job | Path |
 |-------|-----------|-------------|-----|------|
-| Baseline (BAGEL-7B-MoT) | — | pending | 62874 | `/gpfs/scrubbed/linjli/hf_cache/BAGEL-7B-MoT/eval/` |
-| AO | s6000 noEMA | pending | 62871 | `.../ao_td_path_8gpu/0006000_full_noema/eval/` |
-| TextCoT | s1500 noEMA | pending | 62872 | `.../textcot_td_path_8gpu/0001500_full_noema/eval/` |
+| Baseline (BAGEL-7B-MoT) | — | 22.73 | 62874 | `/gpfs/scrubbed/linjli/hf_cache/BAGEL-7B-MoT/eval/` |
+| AO | s6000 noEMA | 40.91 | 62871 | `.../ao_td_path_8gpu/0006000_full_noema/eval/` |
+| TextCoT | s1500 noEMA | 59.09 | 62872 | `.../textcot_td_path_8gpu/0001500_full_noema/eval/` |
+
+---
+
+## Habitat Perspective Taking
+
+Dataset: `weikaih/habitat-perspective-qa-val-v2` (833 samples, 6 splits). Added to eval framework as `HabitatPerspective_Arrow` and `HabitatPerspective_NoArrow`.
+
+| Model | Checkpoint | Arrow (%) | NoArrow (%) |
+|-------|-----------|-----------|-------------|
+| Baseline | — | pending (62890) | pending (62891) |
+| AO | s6000 noEMA | pending (62886) | pending (62887) |
+| TextCoT | s1500 noEMA | pending (62888) | pending (62889) |
+
+> **Note**: Prior submissions (62876–62881) failed with EADDRINUSE port conflict. Resubmitted with unique `--master_port` values.
 
 ---
 
@@ -214,19 +230,27 @@ Eval uses `bagel_mot` with `SAT_perspective` dataset. MCQ evaluation via heurist
 
 | Jobs | Model | Subsets | Status |
 |------|-------|--------|--------|
-| 62541–62544 | MMCoT s6000 vcot | td_path, td_path_arrow (EMA+noEMA) | running (~10h in, 16h limit) |
-| 62779–62780 | AO s3000 EMA Perspective | Arrow, NoArrow | running (~2h in) |
-| 62783–62784 | AO s4500 EMA Perspective | Arrow, NoArrow | running (~2h in) |
-| 62805–62810 | MMCoT s7000 vcot | td_path, td_path_arrow, dh_midpoint (EMA+noEMA) | running (~2h in, 16h limit) |
-| 62845–62848 | VCoT l64 s7000 vcot | td_path, td_path_arrow (EMA+noEMA) | running (~1h in, 16h limit) |
-| 62853 | AO s1500 EMA Perspective NoArrow | NoArrow | running (~30m in) |
-| 62854–62855 | TextCoT s1500 EMA Perspective | Arrow, NoArrow | running (~30m in) |
-| 62864 | AO s1500 EMA Perspective Arrow | Arrow | just submitted |
-| 62867–62868 | TextCoT s2000 EMA Perspective | Arrow, NoArrow | just submitted |
-| 62869–62870 | TextCoT s2000 noEMA Perspective | Arrow, NoArrow | just submitted |
-| 62871 | AO s6000 noEMA SAT_perspective | SAT_perspective | just submitted |
-| 62872 | TextCoT s1500 noEMA SAT_perspective | SAT_perspective | just submitted |
-| 62874 | Baseline SAT_perspective | SAT_perspective | just submitted |
+| 62541–62544 | MMCoT s6000 vcot | td_path, td_path_arrow (EMA+noEMA) | running (~11h in, 16h limit) |
+| 62805–62810 | MMCoT s7000 vcot | td_path, td_path_arrow, dh_midpoint (EMA+noEMA) | running (~3h in, 16h limit) |
+| 62845–62848 | VCoT l64 s7000 vcot | td_path, td_path_arrow (EMA+noEMA) | running (~2h in, 16h limit) |
+| 62853 | AO s1500 EMA Perspective NoArrow | NoArrow | running (~2h in) |
+| 62854–62855 | TextCoT s1500 EMA Perspective | Arrow, NoArrow | running (~2h in) |
+| 62864 | AO s1500 EMA Perspective Arrow | Arrow | running (~1h in) |
+| 62867–62868 | TextCoT s2000 EMA Perspective | Arrow, NoArrow | running (~1h in) |
+| 62886–62887 | AO s6000 noEMA HabitatPerspective | Arrow, NoArrow | just submitted |
+| 62888–62889 | TextCoT s1500 noEMA HabitatPerspective | Arrow, NoArrow | just submitted |
+| 62890–62891 | Baseline HabitatPerspective | Arrow, NoArrow | just submitted |
+
+Completed since last update:
+- 62779 (AO s3000 EMA Perspective Arrow): **TIMEOUT**
+- 62780 (AO s3000 EMA Perspective NoArrow): **TIMEOUT**
+- 62784 (AO s4500 EMA Perspective NoArrow): **TIMEOUT**
+- 62783 (AO s4500 EMA Perspective Arrow): **COMPLETED** — result not yet collected
+- 62869 (TextCoT s2000 noEMA Perspective Arrow): **99.71%**
+- 62870 (TextCoT s2000 noEMA Perspective NoArrow): **99.46%**
+- 62871 (AO s6000 noEMA SAT_perspective): **40.91%**
+- 62872 (TextCoT s1500 noEMA SAT_perspective): **59.09%**
+- 62874 (Baseline SAT_perspective): **22.73%**
 
 ---
 
@@ -260,3 +284,9 @@ Older bulk visualizations (all predictions, no input images):
 4. **TextCoT s2000 EMA missing**: td_path, td_path_arrow, td_midpoint TIMEOUT/FAIL
 5. **VCoT l64 incomplete**: Only dh_midpoint (noEMA, 49.38%) has valid results; td_path/td_path_arrow/EMA now running (62845–62848, 62860)
 6. **GPU allocation bug**: Jobs submitted with `--gpus=2` can be spread across 2 nodes (1 GPU each), causing `torchrun --nproc-per-node=2` assertion failure. Fix: always use `--gpus-per-node=2 --nodes=1`
+7. **Port conflict (EADDRINUSE)**: Multiple `torchrun` jobs on the same node use default port 29500. Fix: add `--master_port=295XX` with unique values per job
+8. **EMA Perspective timeouts**: AO s3000/s4500 EMA Perspective jobs timing out at 2h — may need longer time limit or investigation
+
+## See Also
+
+- [Token Budget & Steps-per-Epoch Analysis](token_budget_and_steps.md) — detailed breakdown of NaViT packing, image/text token costs, and epochs per training setting
