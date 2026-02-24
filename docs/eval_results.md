@@ -174,8 +174,6 @@ Steps/epoch: 606 | s3000 ≈ 5ep, s6000 ≈ 10ep
 | SAT_perspective | pending | 57.58 | — | — |
 | Perspective_Arrow | pending | pending | — | — |
 
-> **Note**: MMCoT s6000 dh_midpoint was never evaluated (no xlsx files exist). The old table had 61.11/67.28 but these have no backing data and may have been transcription errors.
-
 ---
 
 ## Cross-Model Comparison: Perspective Taking
