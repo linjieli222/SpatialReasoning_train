@@ -31,36 +31,38 @@ Config: `bagel_mot` | Base dir: `.../tifa_v3_td_path_answer_only/ao_td_path_8gpu
 
 ### AO noEMA
 
-| Subset | s1500 | s3000 | s4500 | s6000 | s7500 |
-|--------|-------|-------|-------|-------|-------|
-| td_path | 70.49 | 77.07 | 78.76 | **82.33** | 80.26 |
-| td_path_arrow | 70.02 | 76.90 | 77.60 | **79.01** | 79.01 |
-| dh_midpoint | **79.63** | 74.07 | 75.93 | 80.86 | 75.93 |
-| td_midpoint | 72.73 | 73.14 | **75.62** | 75.21 | 74.79 |
-| td_ego_dir | 69.00 | 69.91 | 73.56 | **74.16** | 68.69 |
-| td_ego_side | 67.65 | 78.27 | 79.75 | **80.74** | 78.52 |
-| td_ego_dir_arrow | 67.06 | 69.14 | 71.22 | **73.59** | 66.47 |
-| td_ego_side_arrow | 66.76 | **78.21** | 77.37 | 78.21 | 76.82 |
-| PathTracing | 68.46 | 70.42 | 82.15 | 84.11 | **84.35** |
-| Perspective_Arrow | 88.63 | 70.87 | 78.16 | 80.46 | **83.76** |
-| Perspective_NoArrow | **91.38** | 71.07 | 79.48 | 79.98 | 85.84 |
-| SAT_perspective | — | — | — | 40.91 | — |
+| Subset | s1500 | s2400 | s3000 | s4500 | s6000 | s7500 |
+|--------|-------|-------|-------|-------|-------|-------|
+| td_path | 70.49 | pending (62901) | 77.07 | 78.76 | **82.33** | 80.26 |
+| td_path_arrow | 70.02 | — | 76.90 | 77.60 | **79.01** | 79.01 |
+| dh_midpoint | **79.63** | — | 74.07 | 75.93 | 80.86 | 75.93 |
+| td_midpoint | 72.73 | — | 73.14 | **75.62** | 75.21 | 74.79 |
+| td_ego_dir | 69.00 | — | 69.91 | 73.56 | **74.16** | 68.69 |
+| td_ego_side | 67.65 | — | 78.27 | 79.75 | **80.74** | 78.52 |
+| td_ego_dir_arrow | 67.06 | — | 69.14 | 71.22 | **73.59** | 66.47 |
+| td_ego_side_arrow | 66.76 | — | **78.21** | 77.37 | 78.21 | 76.82 |
+| PathTracing | 68.46 | — | 70.42 | 82.15 | 84.11 | **84.35** |
+| Perspective_Arrow | 88.63 | — | 70.87 | 78.16 | 80.46 | **83.76** |
+| Perspective_NoArrow | **91.38** | — | 71.07 | 79.48 | 79.98 | 85.84 |
+| SAT_perspective | — | — | — | — | 40.91 | — |
+
+s2400 = ~10 epochs (steps_per_epoch = 242)
 
 ### AO EMA
 
-| Subset | s1500 | s3000 | s4500 | s6000 | s7500 |
-|--------|-------|-------|-------|-------|-------|
-| td_path | 34.02 | 33.46 | 40.23 | 67.86 | **75.00** |
-| td_path_arrow | 35.45 | 35.10 | 45.86 | 70.02 | **76.90** |
-| dh_midpoint | 45.06 | 52.47 | 61.73 | 80.86 | **82.10** |
-| td_midpoint | 40.08 | 48.76 | 55.79 | 74.79 | **78.93** |
-| td_ego_dir | 43.47 | 45.59 | 55.93 | 66.87 | **71.43** |
-| td_ego_side | 41.73 | 54.32 | 60.99 | 69.88 | **75.06** |
-| td_ego_dir_arrow | 48.37 | 52.23 | 61.13 | 67.66 | **71.81** |
-| td_ego_side_arrow | 48.60 | 59.22 | 67.32 | 72.91 | **78.49** |
-| PathTracing | 5.62 | 27.38 | 46.70 | 65.53 | **73.11** |
-| Perspective_Arrow | pending (62864) | TIMEOUT | pending (62783) | 74.23 | **74.21** |
-| Perspective_NoArrow | pending (62853) | TIMEOUT | TIMEOUT | **75.19** | 74.38 |
+| Subset | s1500 | s2400 | s3000 | s4500 | s6000 | s7500 |
+|--------|-------|-------|-------|-------|-------|-------|
+| td_path | 34.02 | pending (62900) | 33.46 | 40.23 | 67.86 | **75.00** |
+| td_path_arrow | 35.45 | — | 35.10 | 45.86 | 70.02 | **76.90** |
+| dh_midpoint | 45.06 | — | 52.47 | 61.73 | 80.86 | **82.10** |
+| td_midpoint | 40.08 | — | 48.76 | 55.79 | 74.79 | **78.93** |
+| td_ego_dir | 43.47 | — | 45.59 | 55.93 | 66.87 | **71.43** |
+| td_ego_side | 41.73 | — | 54.32 | 60.99 | 69.88 | **75.06** |
+| td_ego_dir_arrow | 48.37 | — | 52.23 | 61.13 | 67.66 | **71.81** |
+| td_ego_side_arrow | 48.60 | — | 59.22 | 67.32 | 72.91 | **78.49** |
+| PathTracing | 5.62 | — | 27.38 | 46.70 | 65.53 | **73.11** |
+| Perspective_Arrow | pending (62864) | — | TIMEOUT | pending (62783) | 74.23 | **74.21** |
+| Perspective_NoArrow | pending (62853) | — | TIMEOUT | TIMEOUT | **75.19** | 74.38 |
 
 ### AO Result Paths
 
@@ -228,29 +230,29 @@ Dataset: `weikaih/habitat-perspective-qa-val-v2` (833 samples, 6 splits). Added 
 
 ## Pending Jobs Summary
 
+### Eval Jobs
+
 | Jobs | Model | Subsets | Status |
 |------|-------|--------|--------|
-| 62541–62544 | MMCoT s6000 vcot | td_path, td_path_arrow (EMA+noEMA) | running (~11h in, 16h limit) |
-| 62805–62810 | MMCoT s7000 vcot | td_path, td_path_arrow, dh_midpoint (EMA+noEMA) | running (~3h in, 16h limit) |
-| 62845–62848 | VCoT l64 s7000 vcot | td_path, td_path_arrow (EMA+noEMA) | running (~2h in, 16h limit) |
-| 62853 | AO s1500 EMA Perspective NoArrow | NoArrow | running (~2h in) |
-| 62854–62855 | TextCoT s1500 EMA Perspective | Arrow, NoArrow | running (~2h in) |
-| 62864 | AO s1500 EMA Perspective Arrow | Arrow | running (~1h in) |
-| 62867–62868 | TextCoT s2000 EMA Perspective | Arrow, NoArrow | running (~1h in) |
-| 62886–62887 | AO s6000 noEMA HabitatPerspective | Arrow, NoArrow | just submitted |
-| 62888–62889 | TextCoT s1500 noEMA HabitatPerspective | Arrow, NoArrow | just submitted |
-| 62890–62891 | Baseline HabitatPerspective | Arrow, NoArrow | just submitted |
+| 62541–62544 | MMCoT s6000 vcot | td_path, td_path_arrow (EMA+noEMA) | running |
+| 62805–62810 | MMCoT s7000 vcot | td_path, td_path_arrow, dh_midpoint (EMA+noEMA) | running |
+| 62845–62848 | VCoT l64 s7000 vcot | td_path, td_path_arrow (EMA+noEMA) | running |
+| 62853 | AO s1500 EMA Perspective NoArrow | NoArrow | running |
+| 62854–62855 | TextCoT s1500 EMA Perspective | Arrow, NoArrow | running |
+| 62864 | AO s1500 EMA Perspective Arrow | Arrow | running |
+| 62867–62868 | TextCoT s2000 EMA Perspective | Arrow, NoArrow | running |
+| 62886–62887 | AO s6000 noEMA HabitatPerspective | Arrow, NoArrow | submitted |
+| 62888–62889 | TextCoT s1500 noEMA HabitatPerspective | Arrow, NoArrow | submitted |
+| 62890–62891 | Baseline HabitatPerspective | Arrow, NoArrow | submitted |
+| 62898–62899 | AO s2400 convert (EMA, noEMA) | — | submitted |
+| 62900 | AO s2400 EMA td_path | td_path | waiting on 62898 |
+| 62901 | AO s2400 noEMA td_path | td_path | waiting on 62899 |
 
-Completed since last update:
-- 62779 (AO s3000 EMA Perspective Arrow): **TIMEOUT**
-- 62780 (AO s3000 EMA Perspective NoArrow): **TIMEOUT**
-- 62784 (AO s4500 EMA Perspective NoArrow): **TIMEOUT**
-- 62783 (AO s4500 EMA Perspective Arrow): **COMPLETED** — result not yet collected
-- 62869 (TextCoT s2000 noEMA Perspective Arrow): **99.71%**
-- 62870 (TextCoT s2000 noEMA Perspective NoArrow): **99.46%**
-- 62871 (AO s6000 noEMA SAT_perspective): **40.91%**
-- 62872 (TextCoT s1500 noEMA SAT_perspective): **59.09%**
-- 62874 (Baseline SAT_perspective): **22.73%**
+### Training Jobs
+
+| Job | Model | Details | Status |
+|-----|-------|---------|--------|
+| 62902 | TextCoT 3k | total_steps=3000, save_every=200, resumes from step 2000 | submitted |
 
 ---
 

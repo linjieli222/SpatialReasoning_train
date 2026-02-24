@@ -172,14 +172,16 @@ Output sideview at 1024×1024 with longer reasoning text. `mse_weight=1`.
 
 All settings use `expected_num_tokens=24,576` and `max_num_tokens=32,768` per GPU, with 8 GPUs.
 
+`total_samples` in WandB is accurate — it counts the real number of packed training samples per step (no padding inflation since `use_flex=False`).
+
 | Setting | Tokens/sample | Samples/GPU | Samples/step | Steps/epoch | Total steps | ~Epochs |
 |---------|--------------|-------------|-------------|-------------|-------------|---------|
-| **AO** | 5,579 | 5 | 40 | 242 | 1,563 | 6.5 |
-| **TextCoT** | 5,839 | 5 | 40 | 242 | 2,000 | 8.3 |
-| **VCoT l16** | 7,554 | 4 | 32 | 303 | 2,083 | 6.9 |
-| **VCoT l32** | 9,090 | 3 | 24 | 404 | 2,500 | 6.2 |
-| **VCoT l64** | 15,234 | 2 | 16 | 606 | 6,250 | 10.3 |
-| **MMCoT** | 15,498 | 2 | 16 | 606 | 7,000 | 11.6 |
+| **AO** | 5,579 | 5 | 40 | 242 | 9,000+ | 37+ |
+| **TextCoT** | 5,839 | 5 | 40 | 242 | 3,000 | 12.4 |
+| **VCoT l16** | 7,554 | 4 | 32 | 303 | 5,200+ | 17+ |
+| **VCoT l32** | 9,090 | 3 | 24 | 404 | 4,500+ | 11+ |
+| **VCoT l64** | 15,234 | 2 | 16 | 606 | 7,000+ | 11.6+ |
+| **MMCoT** | 15,498 | 2 | 16 | 606 | 7,000+ | 11.6+ |
 
 ### How to read this table
 
@@ -187,8 +189,32 @@ All settings use `expected_num_tokens=24,576` and `max_num_tokens=32,768` per GP
 - **Samples/GPU**: How many samples fit in one GPU's packing budget before exceeding `expected_num_tokens`
 - **Samples/step**: `samples_per_gpu × 8` (total effective batch size)
 - **Steps/epoch**: `ceil(9689 / samples_per_step)` (one pass through the dataset)
-- **Total steps**: Configured in the training script
+- **Total steps**: Latest checkpoint available (training may still be running)
 - **~Epochs**: `total_steps / steps_per_epoch`
+
+### Epoch Milestones
+
+| Setting | Steps/epoch | 5 epochs (step) | 10 epochs (step) |
+|---------|------------|-----------------|-------------------|
+| **AO** | 242 | 1,210 | 2,420 |
+| **TextCoT** | 242 | 1,210 | 2,420 |
+| **VCoT l16** | 303 | 1,515 | 3,030 |
+| **VCoT l32** | 404 | 2,020 | 4,040 |
+| **VCoT l64** | 606 | 3,030 | 6,060 |
+| **MMCoT** | 606 | 3,030 | 6,060 |
+
+### Available Checkpoints
+
+| Setting | Save interval | Checkpoints | Nearest 5-epoch ckpt | Nearest 10-epoch ckpt |
+|---------|--------------|-------------|----------------------|-----------------------|
+| **AO** | 300 | 300, 600, ..., 9000 | **1,200** (5.0 ep) | **2,400** (9.9 ep) |
+| **TextCoT** | 500 → 200 | 500, 1000, 1500, 2000, then 2200, 2400, ..., 3000 | **1,200** (5.0 ep) | **2,400** (9.9 ep) |
+| **VCoT l16** | 400 | 400, 800, ..., 5200 | **1,600** (5.3 ep) | **2,800** or **3,200** |
+| **VCoT l32** | 500 | 500, 1000, ..., 4500 | **2,000** (5.0 ep) | **4,000** (9.9 ep) |
+| **VCoT l64** | 1000 | 1000, 2000, ..., 7000 | **3,000** (5.0 ep) | **6,000** (9.9 ep) |
+| **MMCoT** | 1000 | 1000, 2000, ..., 7000 | **3,000** (5.0 ep) | **6,000** (9.9 ep) |
+
+**Note:** TextCoT originally saved every 500 steps up to 2000. Extended run (3k) saves every 200 steps from step 2000 onward.
 
 ### Packing verification
 
