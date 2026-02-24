@@ -99,6 +99,118 @@ DATASET_INFO = {
             'num_files': 10,
             'num_total_samples': 1000,
         },
+        # TIFA v3 datasets (Tillicum) - visual CoT with sideview generation
+        'tifa_v3_dh_midpoint': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_dh_midpoint',
+            'num_files': 5,
+            'num_total_samples': 2020,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_dh_midpoint.json',
+        },
+        # TIFA v3 answer-only baseline (no visual thinking)
+        'tifa_v3_dh_midpoint_answer_only': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_dh_midpoint_answer_only',
+            'num_files': 5,
+            'num_total_samples': 2020,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_dh_midpoint_answer_only.json',
+        },
+        'tifa_v3_td_midpoint': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_midpoint',
+            'num_files': 5,
+            'num_total_samples': 3752,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_midpoint.json',
+        },
+        'tifa_v3_td_midpoint_answer_only': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_midpoint_answer_only',
+            'num_files': 5,
+            'num_total_samples': 3752,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_midpoint_answer_only.json',
+        },
+        'tifa_v3_td_path': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_path',
+            'num_files': 5,
+            'num_total_samples': 9689,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_path.json',
+        },
+        'tifa_v3_td_path_answer_only': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_path_answer_only',
+            'num_files': 5,
+            'num_total_samples': 9689,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_path_answer_only.json',
+        },
+        'tifa_v3_td_path_arrow': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_path_arrow',
+            'num_files': 5,
+            'num_total_samples': 9898,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_path_arrow.json',
+        },
+        'tifa_v3_td_path_arrow_answer_only': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_path_arrow_answer_only',
+            'num_files': 5,
+            'num_total_samples': 9898,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_path_arrow_answer_only.json',
+        },
+        'tifa_v3_td_ego_dir': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_dir',
+            'num_files': 5,
+            'num_total_samples': 11204,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_dir.json',
+        },
+        'tifa_v3_td_ego_dir_answer_only': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_dir_answer_only',
+            'num_files': 5,
+            'num_total_samples': 11204,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_dir_answer_only.json',
+        },
+        'tifa_v3_td_ego_dir_arrow': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_dir_arrow',
+            'num_files': 5,
+            'num_total_samples': 11290,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_dir_arrow.json',
+        },
+        'tifa_v3_td_ego_dir_arrow_answer_only': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_dir_arrow_answer_only',
+            'num_files': 5,
+            'num_total_samples': 11290,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_dir_arrow_answer_only.json',
+        },
+        'tifa_v3_td_ego_side': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_side',
+            'num_files': 5,
+            'num_total_samples': 13260,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_side.json',
+        },
+        'tifa_v3_td_ego_side_answer_only': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_side_answer_only',
+            'num_files': 5,
+            'num_total_samples': 13260,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_side_answer_only.json',
+        },
+        'tifa_v3_td_ego_side_arrow': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_side_arrow',
+            'num_files': 5,
+            'num_total_samples': 13270,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_side_arrow.json',
+        },
+        'tifa_v3_td_ego_side_arrow_answer_only': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_side_arrow_answer_only',
+            'num_files': 5,
+            'num_total_samples': 13270,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_side_arrow_answer_only.json',
+        },
+        # TIFA v3 Text CoT dataset (text-only chain-of-thought, no sideview generation)
+        'tifa_v3_td_path_text_cot': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_path_text_cot',
+            'num_files': 5,
+            'num_total_samples': 9689,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_path_text_cot.json',
+        },
+        # TIFA v3 MMCoT datasets (multimodal chain-of-thought with reasoning before+after sideview)
+        'tifa_v3_td_path_mmcot': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_path_mmcot',
+            'num_files': 5,
+            'num_total_samples': 9689,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_path_mmcot.json',
+        },
     },
     'vlm_sft': {
         'llava_ov': {
