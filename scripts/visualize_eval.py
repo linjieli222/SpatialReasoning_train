@@ -29,6 +29,86 @@ import sys
 import openpyxl
 
 
+def extract_answer_letter(pred_text):
+    """Extract answer letter from model prediction (corrected scoring)."""
+    pred = str(pred_text).strip()
+
+    # 1. <answer>X</answer> tags
+    match = re.search(r'<answer>\s*\(?([A-Da-d])\)?[\s.,)]*(?:[^<]*)</answer>', pred)
+    if match:
+        return match.group(1).upper()
+
+    # 2. After </think> or <image_end>, look for answer patterns in suffix
+    suffix = pred
+    for marker in ['</think>', '<image_end>']:
+        idx = pred.rfind(marker)
+        if idx >= 0:
+            suffix = pred[idx + len(marker):]
+            break
+
+    # 3. "The answer is (X)" or "The answer is X"
+    match = re.search(r'(?:the\s+)?answer\s+is\s*[:\s]*\(?([A-Da-d])\)?', suffix, re.IGNORECASE)
+    if match:
+        return match.group(1).upper()
+
+    # 4. "**Answer:** X" or "Answer: X"
+    match = re.search(r'\*{0,2}answer\*{0,2}\s*[:]\s*\(?([A-Da-d])\)?', suffix, re.IGNORECASE)
+    if match:
+        return match.group(1).upper()
+
+    # 5. "ANSWER: X"
+    match = re.search(r'ANSWER\s*:\s*\(?([A-Da-d])\)?', suffix)
+    if match:
+        return match.group(1).upper()
+
+    # 6. Bare letter or "X. description" at start of suffix
+    suffix_stripped = suffix.strip()
+    match = re.match(r'^\(?([A-Da-d])\)?[\s.,)]', suffix_stripped)
+    if match:
+        return match.group(1).upper()
+
+    # 7. Single letter
+    if suffix_stripped.upper() in ('A', 'B', 'C', 'D'):
+        return suffix_stripped.upper()
+
+    # 8. Full-text fallback
+    if suffix is pred:
+        match = re.search(r'(?:the\s+)?answer\s+is\s*[:\s]*\(?([A-Da-d])\)?', pred, re.IGNORECASE)
+        if match:
+            return match.group(1).upper()
+        match = re.search(r'answer\s*[:]\s*\(?([A-Da-d])\)?', pred, re.IGNORECASE)
+        if match:
+            return match.group(1).upper()
+        if pred.upper() in ('A', 'B', 'C', 'D'):
+            return pred.upper()
+
+    return None
+
+
+def score_sample(pred_text, gt, item):
+    """Score a single prediction against ground truth (corrected scoring)."""
+    gt_clean = str(gt).strip().upper()
+
+    if gt_clean in ('A', 'B', 'C', 'D'):
+        pred_letter = extract_answer_letter(pred_text)
+        if pred_letter is None:
+            return 0
+        return 1 if pred_letter == gt_clean else 0
+
+    # Text GT (e.g. SAT perspective)
+    pred_letter = extract_answer_letter(pred_text)
+    if pred_letter is not None:
+        pred_answer = str(item.get(pred_letter, '')).strip().upper()
+        if pred_answer == gt_clean:
+            return 1
+
+    match = re.search(r'<answer>\s*(.*?)\s*</answer>', str(pred_text), re.IGNORECASE)
+    if match and match.group(1).strip().upper() == gt_clean:
+        return 1
+
+    return 0
+
+
 def load_dataset_images(dataset_name):
     """Load input images from the eval dataset as base64 strings.
 
@@ -169,15 +249,14 @@ def generate_html(samples, title, output_path):
 """]
 
     for s in samples:
-        hit = s.get("hit", 0)
         idx = s.get("index", "?")
         question = html.escape(str(s.get("question", "")))
         answer = str(s.get("answer", ""))
         prediction_raw = str(s.get("prediction", ""))
 
-        # Extract predicted answer letter
-        pred_match = re.search(r'<answer>\s*([A-D])\s*</answer>', prediction_raw)
-        pred_letter = pred_match.group(1) if pred_match else None
+        # Use corrected scoring
+        hit = score_sample(prediction_raw, answer, s)
+        pred_letter = extract_answer_letter(prediction_raw)
 
         badge_cls = "correct" if hit == 1 else "wrong"
         badge_text = "Correct" if hit == 1 else "Wrong"
