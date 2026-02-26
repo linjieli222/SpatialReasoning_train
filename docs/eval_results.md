@@ -1,6 +1,6 @@
 # Evaluation Results
 
-Last updated: 2026-02-24 (RESCORED — see scoring fix note below)
+Last updated: 2026-02-26 (RESCORED — see scoring fix note below)
 
 ## Scoring Fix (2026-02-24)
 
@@ -64,15 +64,15 @@ Steps/epoch: 242 | s1200 ≈ 5ep, s2400 ≈ 10ep
 | Perspective_Arrow | 52.28 | — | **54.25** | 54.72 | 53.51 | 53.82 |
 | Perspective_NoArrow | **53.13** | — | 53.40 | **53.76** | 51.41 | 53.20 |
 | SAT_perspective | — | — | — | — | 40.91 | — |
-| HabitatPerspective_Arrow | — | pending | — | — | FAIL (NCCL) | — |
-| HabitatPerspective_NoArrow | — | pending | — | — | FAIL (NCCL) | — |
+| HabitatPerspective_Arrow | — | — | — | — | FAIL (NCCL) | — |
+| HabitatPerspective_NoArrow | — | — | — | — | FAIL (NCCL) | — |
 
 ### AO EMA
 
 | Subset | s1500 | s2400 | s3000 | s4500 | s6000 | s7500 |
 |--------|-------|-------|-------|-------|-------|-------|
 | td_path | 33.65† | 34.77† | 33.08† | 38.91 | 67.86 | **75.00** |
-| td_path_arrow | 35.10† | pending | 35.45† | 45.68 | 70.02 | **76.90** |
+| td_path_arrow | 35.10† | 37.92† | 35.45† | 45.68 | 70.02 | **76.90** |
 | dh_midpoint | 53.70† | 55.56† | 56.17† | 62.35 | 80.86 | **82.10** |
 | td_midpoint | 48.76† | — | 52.48† | 56.61 | 74.79 | **78.93** |
 | td_ego_dir | 44.68 | — | 45.59 | 55.93 | 66.87 | **71.43** |
@@ -80,11 +80,11 @@ Steps/epoch: 242 | s1200 ≈ 5ep, s2400 ≈ 10ep
 | td_ego_dir_arrow | 47.18 | — | 52.23 | 61.13 | 67.66 | **71.81** |
 | td_ego_side_arrow | 48.60 | — | 59.22 | 67.32 | 72.91 | **78.49** |
 | PathTracing | 27.38† | — | 32.76† | 47.92 | 65.53 | **73.11** |
-| Perspective_Arrow | 36.05† | pending | 40.18† | 41.61† | 52.23 | **54.78** |
-| Perspective_NoArrow | pending | — | 39.66† | 44.79† | 50.54 | **51.00** |
-| SAT_perspective | — | pending | — | — | — | — |
-| HabitatPerspective_Arrow | — | pending | — | — | — | — |
-| HabitatPerspective_NoArrow | — | pending | — | — | — | — |
+| Perspective_Arrow | 36.05† | — | 40.18† | 41.61† | 52.23 | **54.78** |
+| Perspective_NoArrow | — | — | 39.66† | 44.79† | 50.54 | **51.00** |
+| SAT_perspective | — | — | — | — | — | — |
+| HabitatPerspective_Arrow | — | — | — | — | — | — |
+| HabitatPerspective_NoArrow | — | — | — | — | — | — |
 
 †Answer extraction rate <90% — some EMA predictions use non-standard formats that couldn't be parsed (counted as incorrect).
 
@@ -127,8 +127,8 @@ Training completed to 3000 steps (checkpoints: 500, 1000, 1500, 2000, 2200, 2400
 | td_ego_dir_arrow | **48.66** | 47.77 |
 | td_ego_side_arrow | **50.84** | 48.88 |
 | PathTracing | **33.01**† | 31.54† |
-| Perspective_Arrow | pending | 31.04† |
-| Perspective_NoArrow | pending | 41.65† |
+| Perspective_Arrow | — | 31.04† |
+| Perspective_NoArrow | — | 41.65† |
 
 †Answer extraction rate <90%.
 
@@ -143,13 +143,13 @@ Steps/epoch: 606 | s3000 ≈ 5ep, s6000 ≈ 10ep
 
 | Subset | s6000 noEMA | s6000 EMA | s7000 noEMA | s7000 EMA |
 |--------|-------------|-----------|-------------|-----------|
-| td_path | pending | pending | running | running |
-| td_path_arrow | pending | pending | running | running |
-| dh_midpoint | 52.47 | 11.11†! | running | pending |
+| td_path | 40.23 | 3.01†! | **47.37** | 40.04 |
+| td_path_arrow | 38.45 | 2.47†! | **45.15** | 41.80 |
+| dh_midpoint | 52.47 | 11.11†! | 49.38 | **52.47** |
 
-> **Note**: VCoT l64 s6000 EMA dh_midpoint has only 25% answer extraction — the model produces mostly unparseable outputs at this EMA checkpoint.
+> **Note**: VCoT l64 s6000 EMA has extremely low answer extraction (5–25%) — the EMA has not converged at this checkpoint.
 >
-> **Note**: VCoT l64 s7000 was previously evaluated with `bagel_mot` (text-only), but the model generates images and needs `bagel_mot_vcot`. Those results (all 0%) are invalid. Proper vcot evaluations are running/pending.
+> **Note**: VCoT l64 s7000 was previously evaluated with `bagel_mot` (text-only), but the model generates images and needs `bagel_mot_vcot`. Those results (all 0%) were invalid and have been replaced with correct `bagel_mot_vcot` evaluations above.
 
 ### VCoT dh_midpoint debug (vcot_debug_8gpu)
 
@@ -168,11 +168,11 @@ Steps/epoch: 606 | s3000 ≈ 5ep, s6000 ≈ 10ep
 
 | Subset | s6000 noEMA | s6000 EMA | s7000 noEMA | s7000 EMA |
 |--------|-------------|-----------|-------------|-----------|
-| td_path | 56.77 | 43.98 | running | running |
-| td_path_arrow | 51.50 | 41.80 | running | running |
-| dh_midpoint | — | — | 55.56 | 67.90 |
-| SAT_perspective | pending | 57.58 | — | — |
-| Perspective_Arrow | pending | pending | — | — |
+| td_path | 56.77 | 43.98 | **49.44** | 44.74 |
+| td_path_arrow | 51.50 | 41.80 | **51.15** | 46.38 |
+| dh_midpoint | 61.11 | 67.28 | 55.56 | **67.90** |
+| SAT_perspective | — | 57.58 | — | — |
+| Perspective_Arrow | — | — | — | — |
 
 ---
 
@@ -184,7 +184,7 @@ Steps/epoch: 606 | s3000 ≈ 5ep, s6000 ≈ 10ep
 |-------|-----------|----------|
 | AO | 54.25 (s3000) | 54.78 (s7500) |
 | TextCoT | 47.75 (s1500) | 31.04 (s2000)† |
-| MMCoT | pending | pending |
+| MMCoT | — | — |
 
 ### AI2Thor Perspective (NoArrow) — category-averaged
 
@@ -214,8 +214,8 @@ All HabitatPerspective evals failed with NCCL watchdog timeout (SIGABRT after ~1
 |-------|-----------|----------|
 | AO | **82.33** (s6000) | 75.00 (s7500) |
 | TextCoT | 64.47 (s2000) | 32.33 (s2000)† |
-| MMCoT | 56.77 (s6000) | 43.98 (s6000) |
-| VCoT l64 | running | running |
+| MMCoT | 56.77 (s6000) | 44.74 (s7000) |
+| VCoT l64 | 47.37 (s7000) | 40.04 (s7000) |
 | Baseline | — | — |
 
 ---
