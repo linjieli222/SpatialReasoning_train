@@ -1,5 +1,23 @@
 # Project Instructions
 
+## General Rules
+When the user asks to 'check' or 'inspect' a specific file, check EXACTLY that file — not a similarly named file or a broader set. Confirm the exact filename before proceeding.
+
+## HPC Environment
+- All caches (HuggingFace, pip, torch, LMUData) must go to scratch/tmp storage, NEVER to ~/. Home directory has strict quota.
+- Preferred storage tiers: /tmp or $SCRATCH for caches, /projects for persistent outputs, scrubbed storage for intermediate results.
+- Use `uv` instead of `pip` for Python package management.
+
+## Git Workflow
+- Before running `git push`, verify there are actually staged/committed changes to push. Never assume changes exist.
+- Use `id_rsa` for SSH keys, not `id_ed25519`.
+- Always exclude output directories (outputs_*, slurm_logs_*) from commits unless explicitly asked to include them.
+
+## Eval Pipeline
+- When asked about a specific model variant (TextCoT, AO, etc.), answer ONLY about that variant — do not substitute or conflate with another.
+- SLURM eval jobs MUST have unique output directory names per checkpoint/config combo to avoid naming collisions.
+- Save eval results to /projects or persistent storage, not ephemeral locations.
+
 ## Python Environment
 When running Python commands, use the python binary directly:
 ```
