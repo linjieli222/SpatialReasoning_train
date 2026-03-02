@@ -202,7 +202,7 @@ h1 {{
         image_list = row['image_list']
         instruction_list = row['instruction_list']
         output_text_list = row['output_text_list']
-        num_input_images = row['num_input_images']
+        num_input_images = row.get('num_input_images', 1)
 
         # Decode images
         image_data_uris = []
