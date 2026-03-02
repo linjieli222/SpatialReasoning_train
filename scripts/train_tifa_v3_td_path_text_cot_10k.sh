@@ -3,8 +3,8 @@
 
 resume_from=${resume_from:-"/gpfs/scrubbed/linjli/hf_cache/BAGEL-7B-MoT"}
 run_name=${run_name:-"textcot_td_path_8gpu"}
-output_path=${output_path:-"/gpfs/scrubbed/krishna/linjli/bagel_debug_output/tifa_v3_td_path_text_cot_v2/${run_name}/output"}
-ckpt_path=${ckpt_path:-"/gpfs/scrubbed/krishna/linjli/bagel_debug_output/tifa_v3_td_path_text_cot_v2/${run_name}"}
+output_path=${output_path:-"/gpfs/scrubbed/krishna/linjli/bagel_debug_output/tifa_v3_td_path_text_cot_ema999/${run_name}/output"}
+ckpt_path=${ckpt_path:-"/gpfs/scrubbed/krishna/linjli/bagel_debug_output/tifa_v3_td_path_text_cot_ema999/${run_name}"}
 
 export PYTHONPATH="${PYTHONPATH}:$(pwd)"
 
@@ -36,4 +36,4 @@ torchrun \
   --total_steps 10000 \
   --save_every 1000 \
   --wandb_project tifa_v3 \
-  --wandb_name textcot_td_path_10k_v2
+  --wandb_name textcot_td_path_10k_ema999
