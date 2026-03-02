@@ -322,18 +322,22 @@ def process_config(config_name, variant="default",
         if mmcot_dir is None:
             raise ValueError("--mmcot_dir is required for mmcot variant")
         mmcot_lookup = _load_mmcot(mmcot_dir, config_name)
-        # Filter to only samples that have mmcot entries (num_proc=1 to avoid pickling issues)
+        # Use select with pre-computed indices (memory-efficient, avoids filter OOM)
         mmcot_qids = set(mmcot_lookup.keys())
-        ds = ds.filter(lambda item: item['question_id'] in mmcot_qids, num_proc=1)
-        print(f"Filtered to {len(ds)} samples with mmcot entries")
+        all_qids = ds['question_id']
+        indices = [i for i, qid in enumerate(all_qids) if qid in mmcot_qids]
+        ds = ds.select(indices)
+        print(f"Selected {len(ds)} samples with mmcot entries")
         transform_fn = make_transform_item_mmcot(mmcot_lookup)
     elif variant == "text_cot":
         if textcot_dir is None:
             raise ValueError("--textcot_dir is required for text_cot variant")
         textcot_lookup = _load_mmcot(textcot_dir, config_name)  # same jsonl loader
         textcot_qids = set(textcot_lookup.keys())
-        ds = ds.filter(lambda item: item['question_id'] in textcot_qids, num_proc=1)
-        print(f"Filtered to {len(ds)} samples with text_cot entries")
+        all_qids = ds['question_id']
+        indices = [i for i, qid in enumerate(all_qids) if qid in textcot_qids]
+        ds = ds.select(indices)
+        print(f"Selected {len(ds)} samples with text_cot entries")
         transform_fn = make_transform_item_text_cot(textcot_lookup)
     else:
         transform_fn = TRANSFORM_FNS[variant]
