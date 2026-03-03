@@ -2,6 +2,14 @@
 
 Back to [Eval Results Index](eval_results.md)
 
+## Figures
+
+![AO td_ego_dir training curves — PT2P and SV](figures/ao_ego_dir_training_curves.png)
+
+![VCoT l32 td_ego_dir eval setting comparison at s1k and s2k](figures/vcot_l32_eval_comparison.png)
+
+![RealPathTracing overfitting pattern — AO td_ego_dir](figures/realpt_training_curves.png)
+
 ---
 
 ## AO td_ego_dir

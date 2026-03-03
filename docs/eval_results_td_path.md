@@ -2,6 +2,16 @@
 
 Back to [Eval Results Index](eval_results.md)
 
+## Figures
+
+![td_path training curves — noEMA vs EMA for all models](figures/td_path_training_curves.png)
+
+![dh_midpoint training curves — noEMA vs EMA for all models](figures/dh_midpoint_training_curves.png)
+
+![Cross-model best accuracy comparison across subsets](figures/cross_model_best_accuracy.png)
+
+![VCoT l64 EMA nothink rise-then-collapse on td_path](figures/vcot_l64_nothink_collapse.png)
+
 ---
 
 ## Answer-Only (AO)
