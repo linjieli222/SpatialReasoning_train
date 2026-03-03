@@ -269,63 +269,120 @@ def fig_ao_ego_dir_training_curves():
 
 
 # ===================================================================
-# Figure 6: VCoT l32 td_ego_dir eval comparison (bars)
+# Figure 6: VCoT l32 td_ego_dir eval comparison (2x2 line plots)
 # ===================================================================
 def fig_vcot_l32_eval_comparison():
-    # PT2P accuracy at s1k and s2k across eval modes
-    labels = [
-        'VCoT img-gen\nnoEMA', 'VCoT img-gen\nEMA',
-        'Text think\nnoEMA', 'Text think\nEMA',
-        'Nothink\nnoEMA', 'Nothink\nEMA',
-    ]
-    # PT2P values
-    s1k_pt2p = [np.nan, 47.4, 71.7, 55.3, 72.0, 56.5]
-    s2k_pt2p = [np.nan, np.nan, np.nan, 68.1, 71.7, 74.5]
-    # SV values
-    s1k_sv = [67.2, 55.6, 67.2, 57.6, 67.2, 56.6]
-    s2k_sv = [55.1, 60.6, 68.2, 66.2, 68.7, 64.6]
+    # Data organized as {eval_setting: {subset: ([steps], [accs])}}
+    # NaN used for missing data points; lines skip them.
+    nan = np.nan
 
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5.5))
+    # --- noEMA ---
+    # VCoT image-gen noEMA
+    vcot_ig_noema_pt2p = ([1000, 2000, 3000, 4000, 5000], [nan, nan, nan, nan, nan])
+    vcot_ig_noema_sv   = ([1000, 2000, 3000, 4000, 5000], [67.2, 55.1, 55.1, 57.1, 58.1])
+    # Text think noEMA
+    text_noema_pt2p = ([1000, 2000, 3000], [71.7, nan, nan])
+    text_noema_sv   = ([1000, 2000, 3000], [67.2, 68.2, nan])
+    # Nothink noEMA
+    nothink_noema_pt2p = ([1000, 2000, 3000], [72.0, 71.7, 0.0])
+    nothink_noema_sv   = ([1000, 2000, 3000], [67.2, 68.7, 0.5])
 
-    x = np.arange(len(labels))
-    bar_w = 0.35
+    # --- EMA ---
+    # VCoT image-gen EMA
+    vcot_ig_ema_pt2p = ([1000, 2000, 3000, 4000, 5000], [47.4, nan, nan, nan, nan])
+    vcot_ig_ema_sv   = ([1000, 2000, 3000, 4000, 5000], [55.6, 60.6, 57.1, 57.1, nan])
+    # Text think EMA
+    text_ema_pt2p = ([1000, 2000, 3000], [55.3, 68.1, nan])
+    text_ema_sv   = ([1000, 2000, 3000], [57.6, 66.2, 68.7])
+    # Nothink EMA
+    nothink_ema_pt2p = ([1000, 2000, 3000], [56.5, 74.5, 34.7])
+    nothink_ema_sv   = ([1000, 2000, 3000], [56.6, 64.6, 34.3])
 
-    # PT2P subplot
-    ax = axes[0]
-    bars1 = ax.bar(x - bar_w / 2, s1k_pt2p, bar_w, label='s1000', color='#5b9bd5', edgecolor='white')
-    bars2 = ax.bar(x + bar_w / 2, s2k_pt2p, bar_w, label='s2000', color='#ed7d31', edgecolor='white')
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=8)
-    ax.set_ylabel('Accuracy (%)')
-    ax.set_title('PT2P (4-choice MCQ)', fontsize=13)
-    ax.legend(fontsize=9)
-    ax.set_ylim(0, 85)
-    # Add value labels
-    for bar_group in [bars1, bars2]:
-        for bar in bar_group:
-            h = bar.get_height()
-            if not np.isnan(h) and h > 0:
-                ax.text(bar.get_x() + bar.get_width() / 2, h + 1, f'{h:.0f}',
-                        ha='center', va='bottom', fontsize=7)
+    # VCoT image-gen partial PT2P results (from pkl files)
+    vcot_partial_noema_pt2p = ([1000, 2000, 3000, 4000, 5000], [50.0, 55.5, 60.5, 59.5, 56.2])
+    vcot_partial_ema_pt2p   = ([1000, 2000, 3000, 4000, 5000], [47.4, 55.5, 61.8, 62.3, 59.1])
 
-    # SV subplot
-    ax = axes[1]
-    bars1 = ax.bar(x - bar_w / 2, s1k_sv, bar_w, label='s1000', color='#5b9bd5', edgecolor='white')
-    bars2 = ax.bar(x + bar_w / 2, s2k_sv, bar_w, label='s2000', color='#ed7d31', edgecolor='white')
-    ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=8)
-    ax.set_title('SV (binary)', fontsize=13)
-    ax.legend(fontsize=9)
-    ax.set_ylim(0, 85)
-    for bar_group in [bars1, bars2]:
-        for bar in bar_group:
-            h = bar.get_height()
-            if not np.isnan(h) and h > 0:
-                ax.text(bar.get_x() + bar.get_width() / 2, h + 1, f'{h:.0f}',
-                        ha='center', va='bottom', fontsize=7)
+    eval_colors = {'VCoT img-gen': '#9467bd', 'Text think': '#17becf', 'Nothink': '#e377c2'}
+    eval_markers = {'VCoT img-gen': 'D', 'Text think': 's', 'Nothink': 'o'}
 
-    fig.suptitle('VCoT l32 td_ego_dir: Eval Setting Comparison', fontsize=14, fontweight='bold')
-    fig.tight_layout(rect=[0, 0, 1, 0.94])
+    def _plot_line(ax, steps, accs, color, marker, label, linestyle='-'):
+        """Plot a line, skipping NaN values."""
+        s = np.array(steps, dtype=float)
+        a = np.array(accs, dtype=float)
+        mask = ~np.isnan(a)
+        if mask.sum() == 0:
+            return
+        ax.plot(s[mask], a[mask], color=color, marker=marker, label=label,
+                linewidth=2, markersize=6, linestyle=linestyle)
+        # Add value labels at each point
+        for xi, yi in zip(s[mask], a[mask]):
+            ax.annotate(f'{yi:.0f}', (xi, yi), textcoords='offset points',
+                        xytext=(0, 8), ha='center', fontsize=7.5, color=color,
+                        fontweight='bold')
+
+    fig, axes = plt.subplots(2, 2, figsize=(12, 9), sharex=True)
+
+    # Row 0: noEMA
+    # PT2P noEMA
+    ax = axes[0, 0]
+    _plot_line(ax, *vcot_partial_noema_pt2p, eval_colors['VCoT img-gen'],
+               eval_markers['VCoT img-gen'], 'VCoT img-gen (partial)', '--')
+    _plot_line(ax, *text_noema_pt2p, eval_colors['Text think'],
+               eval_markers['Text think'], 'Text think')
+    _plot_line(ax, *nothink_noema_pt2p, eval_colors['Nothink'],
+               eval_markers['Nothink'], 'Nothink')
+    ax.set_ylabel('Accuracy (%)', fontsize=11)
+    ax.set_title('PT2P (4-choice MCQ) — noEMA', fontsize=12, fontweight='bold')
+    ax.legend(fontsize=9, loc='lower left')
+    ax.set_ylim(-5, 85)
+
+    # SV noEMA
+    ax = axes[0, 1]
+    _plot_line(ax, *vcot_ig_noema_sv, eval_colors['VCoT img-gen'],
+               eval_markers['VCoT img-gen'], 'VCoT img-gen')
+    _plot_line(ax, *text_noema_sv, eval_colors['Text think'],
+               eval_markers['Text think'], 'Text think')
+    _plot_line(ax, *nothink_noema_sv, eval_colors['Nothink'],
+               eval_markers['Nothink'], 'Nothink')
+    ax.set_title('SV (binary) — noEMA', fontsize=12, fontweight='bold')
+    ax.legend(fontsize=9, loc='lower left')
+    ax.set_ylim(-5, 85)
+
+    # Row 1: EMA
+    # PT2P EMA
+    ax = axes[1, 0]
+    _plot_line(ax, *vcot_partial_ema_pt2p, eval_colors['VCoT img-gen'],
+               eval_markers['VCoT img-gen'], 'VCoT img-gen (partial)', '--')
+    _plot_line(ax, *text_ema_pt2p, eval_colors['Text think'],
+               eval_markers['Text think'], 'Text think')
+    _plot_line(ax, *nothink_ema_pt2p, eval_colors['Nothink'],
+               eval_markers['Nothink'], 'Nothink')
+    ax.set_xlabel('Training Steps', fontsize=11)
+    ax.set_ylabel('Accuracy (%)', fontsize=11)
+    ax.set_title('PT2P (4-choice MCQ) — EMA', fontsize=12, fontweight='bold')
+    ax.legend(fontsize=9, loc='lower left')
+    ax.set_ylim(-5, 85)
+
+    # SV EMA
+    ax = axes[1, 1]
+    _plot_line(ax, *vcot_ig_ema_sv, eval_colors['VCoT img-gen'],
+               eval_markers['VCoT img-gen'], 'VCoT img-gen')
+    _plot_line(ax, *text_ema_sv, eval_colors['Text think'],
+               eval_markers['Text think'], 'Text think')
+    _plot_line(ax, *nothink_ema_sv, eval_colors['Nothink'],
+               eval_markers['Nothink'], 'Nothink')
+    ax.set_xlabel('Training Steps', fontsize=11)
+    ax.set_title('SV (binary) — EMA', fontsize=12, fontweight='bold')
+    ax.legend(fontsize=9, loc='lower left')
+    ax.set_ylim(-5, 85)
+
+    # Add red shading at s3k to highlight collapse region
+    for ax in axes.flat:
+        ax.axvspan(2500, 3500, alpha=0.08, color='red')
+
+    fig.suptitle('VCoT l32 td_ego_dir: Eval Setting Comparison Across Steps',
+                 fontsize=14, fontweight='bold')
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
     save(fig, 'vcot_l32_eval_comparison.png')
 
 
