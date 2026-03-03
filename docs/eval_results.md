@@ -1,6 +1,6 @@
 # Evaluation Results
 
-Last updated: 2026-03-02
+Last updated: 2026-03-03
 
 ## Scoring Fix (2026-02-24)
 
@@ -287,19 +287,17 @@ Training: 5 epochs on td_ego_dir subset. Training still running (s6k+ available)
 
 ### AO td_ego_dir noEMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
-|--------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 76.3 | 79.0 | 78.1 | 77.5 | 76.9 | 78.1 |
-| SV (acc) | 66.7 | 71.2 | 70.7 | 68.2 | 71.7 | 70.2 |
-| SV (F1) | 64.5 | 68.2 | 67.0 | 63.6 | 69.9 | 72.6 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| PT2P (acc) | 76.3 | 79.0 | 78.1 | 77.5 | 76.9 | 78.1 | 78.4 | 75.1 | 79.3 | **80.2** |
+| SV (acc) | 66.7 | 71.2 | 70.7 | 68.2 | 71.7 | 70.2 | 66.2 | 69.7 | 71.7 | 72.2 |
 
 ### AO td_ego_dir EMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
-|--------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 53.8 | 77.5 | 79.0 | 79.0 | 79.3 | **80.9** |
-| SV (acc) | 59.6 | 71.2 | 69.2 | 67.7 | 72.7 | 72.2 |
-| SV (F1) | 39.4 | 69.2 | 64.7 | 64.0 | 70.3 | 71.2 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| PT2P (acc) | 53.8 | 77.5 | 79.0 | 79.0 | 79.3 | **80.9** | 79.6 | 79.9 | 79.0 | 79.6 |
+| SV (acc) | 59.6 | 71.2 | 69.2 | 67.7 | 72.7 | 72.2 | 72.2 | 71.7 | **73.7** | **73.7** |
 
 ---
 
@@ -318,21 +316,19 @@ Training: VCoT with 512x512 output images (latent 32). Training still running.
 
 ### VCoT l32 td_ego_dir noEMA — VCoT image gen (`bagel_mot_vcot`)
 
-| Subset | s1000 | s2000 | s3000 | s4000 |
-|--------|-------|-------|-------|-------|
-| PT2P (acc) | -- | -- | -- | -- |
-| SV (acc) | 67.2 | -- | -- | -- |
-| SV (F1) | 61.1 | -- | -- | -- |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2P (acc) | -- | -- | -- | -- | -- |
+| SV (acc) | **67.2** | 55.1 | 55.1 | 57.1 | 58.1 |
 
 ### VCoT l32 td_ego_dir EMA — VCoT image gen (`bagel_mot_vcot`)
 
-| Subset | s1000 | s2000 | s3000 | s4000 |
-|--------|-------|-------|-------|-------|
-| PT2P (acc) | -- | -- | -- | -- |
-| SV (acc) | 55.6 | -- | -- | -- |
-| SV (F1) | 41.3 | -- | -- | -- |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 47.4 | -- | -- | -- | -- |
+| SV (acc) | 55.6 | **60.6** | 57.1 | 57.1 | -- |
 
-> Partial results — remaining eval jobs still running (~1h left for s1k-s3k, ~3h for s4k).
+> PT2P image-gen evals take ~11h (237s/sample diffusion). Resubmitted with 12h limit. SV s6k-s7k still running.
 
 ### VCoT l32 td_ego_dir noEMA — Text-only think (`bagel_mot`)
 
@@ -369,6 +365,65 @@ Training: VCoT with 512x512 output images (latent 32). Training still running.
 | SV (F1) | 30.6 | **56.8** | 44.9 |
 
 > **Pattern**: Similar rise-then-collapse as VCoT l64 but at s3k instead of s12k. noEMA collapses completely (0.0% PT2P), EMA partially (34.7% PT2P). VCoT commitment strengthens rapidly between s2k-s3k for ego_dir variant.
+
+### VCoT l32 td_ego_dir — VCoT image gen PT2P partial results
+
+Early accuracy from partial pkl files (timed-out 2-GPU runs). Full 8-GPU resubmission pending.
+
+| Checkpoint | noEMA | EMA | Samples |
+|------------|-------|-----|---------|
+| s1k | 50.0 | 47.4 (full) | 230/329 |
+| s2k | 55.5 | 55.5 | 220/329 |
+| s3k | **60.5** | **61.8** | 220/329 |
+| s4k | 59.5 | **62.3** | 220/329 |
+| s5k | 56.2 | 59.1 | 220/329 |
+| s6k | 48.3 | 51.7 | 60/329 |
+| s7k | 60.0 | 58.3 | 60/329 |
+
+> VCoT image-gen PT2P peaks around s3k-s4k at ~62%, well below GT prefill (87.5%), confirming sideview generation quality is the bottleneck.
+
+---
+
+## RealPathTracing (Real Indoor)
+
+Dataset: `linjieli222/real_indoor_path_tracing` | 2 subsets: `td_path` (174 samples), `td_path_arrow` (158 samples)
+Single real-world indoor image per sample (no AI2Thor synthetic images).
+
+### AO td_ego_dir — RealPT
+
+**EMA:**
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| td_path | 39.1 | **49.4** | 47.7 | 48.3 | 48.9 | 46.6 | 45.4 | 43.1 |
+| td_path_arrow | 60.1 | **74.1** | 68.4 | 63.9 | 63.9 | 62.7 | 57.6 | 56.3 |
+
+**noEMA:**
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| td_path | **46.6** | 45.4 | 44.3 | 42.0 | 43.1 | 41.4 | 44.8 | 40.2 |
+| td_path_arrow | **67.1** | 66.5 | 59.5 | 58.2 | 63.9 | 56.3 | 57.0 | 51.9 |
+
+> AO peaks early (s1k-s2k) on real data then declines — overfits to AI2Thor synthetic images. td_path_arrow consistently 15-20pp easier than td_path.
+
+### VCoT l32 td_ego_dir — RealPT (think, `bagel_mot`)
+
+| Subset | s1k EMA | s1k noEMA | s2k EMA | s2k noEMA | s3k EMA | s3k noEMA | s4k EMA | s4k noEMA |
+|--------|---------|-----------|---------|-----------|---------|-----------|---------|-----------|
+| td_path | 38.5 | 9.2 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| td_path_arrow | 57.0 | 11.4 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+
+> Same as AI2Thor: VCoT think outputs `<image_start>` and never produces an answer in text-only mode. Only s1k EMA retains partial text answering ability.
+
+### VCoT l32 td_ego_dir — RealPT (nothink, `bagel_mot_nothink`)
+
+| Subset | s1k EMA | s1k noEMA | s2k EMA | s2k noEMA | s3k EMA | s3k noEMA | s4k EMA | s4k noEMA |
+|--------|---------|-----------|---------|-----------|---------|-----------|---------|-----------|
+| td_path | 45.4 | **47.1** | **46.6** | 46.6 | 43.1 | 0.0 | 6.9 | 0.0 |
+| td_path_arrow | 65.8 | **68.4** | **68.4** | 59.5 | -- | 0.0 | 3.8 | 1.3 |
+
+> Nothink matches AO at s1k-s2k, then collapses at s3k (same rise-then-collapse pattern as AI2Thor evals). Real-world transfer peaks at s1k-s2k before AI2Thor overfitting destroys generalization.
 
 ---
 
@@ -451,7 +506,11 @@ Generated by `scripts/visualize_eval.py`.
 
 ## Pending Evals
 
-- **VCoT l32 td_ego_dir image-gen**: s1k-s4k EMA+noEMA PT2P+SV (bagel_mot_vcot) — running (jobs 66688-66699, 66782-66785)
+- **VCoT l32 td_ego_dir image-gen PT2P**: s1k-s5k EMA+noEMA resubmitted with 8 GPUs (2-GPU runs timed out at ~11h)
+- **VCoT l32 td_ego_dir image-gen SV**: s6k-s8k running
+- **VCoT l32 td_ego_dir prefill**: s3k EMA submitted (job 67101)
+- **VCoT l64 td_path prefill**: s7k EMA+noEMA running (~60% done)
+- **VCoT mse_weight=5 training**: td_ego_dir l32, 15k steps (job 67093)
 - **AO noEMA s12000/s18000**: Perspective_Arrow, Perspective_NoArrow (port collision failures, need resubmission)
 - **TextCoT s3000 EMA, s21000, s24000**: td_path, td_path_arrow (were still running at last check)
 - **VCoT l64 s9000-s15000**: td_path, td_path_arrow, Perspective_Arrow, Perspective_NoArrow (cancelled)
