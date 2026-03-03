@@ -306,21 +306,37 @@ Training: VCoT with 512x512 output images (latent 32). Training still running.
 | Text-only think | `bagel_mot` | Think with `<think>` + `<image_start>` tags | No | Text-only output; model may output `<image_start>` but no image is generated |
 | No-think | `bagel_mot_nothink` | "Answer the question" (answer-only) | No | Answer-only prompt + "Do not think or generate any images." appended to question |
 
-### VCoT l32 td_ego_dir — VCoT image gen (`bagel_mot_vcot`)
+### VCoT l32 td_ego_dir noEMA — VCoT image gen (`bagel_mot_vcot`)
 
 > Results pending — eval jobs still running (~3-4h per job).
 
-### VCoT l32 td_ego_dir — Text-only think (`bagel_mot`)
+### VCoT l32 td_ego_dir EMA — VCoT image gen (`bagel_mot_vcot`)
 
-| Subset | s1000 EMA | s1000 noEMA | s2000 EMA | s2000 noEMA | s3000 EMA | s3000 noEMA |
-|--------|-----------|-------------|-----------|-------------|-----------|-------------|
-| PT2P (acc) | 55.3 | 71.7 | 68.1 | -- | -- | -- |
-| SV (acc) | 57.6 | 67.2 | 66.2 | 68.2 | 68.7 | -- |
-| SV (F1) | 35.4 | 62.0 | 58.9 | 60.8 | 64.8 | -- |
+> Results pending — eval jobs still running (~3-4h per job).
+
+### VCoT l32 td_ego_dir noEMA — Text-only think (`bagel_mot`)
+
+| Subset | s1000 | s2000 | s3000 |
+|--------|-------|-------|-------|
+| PT2P (acc) | 71.7 | -- | -- |
+| SV (acc) | 67.2 | 68.2 | -- |
+| SV (F1) | 62.0 | 60.8 | -- |
+
+### VCoT l32 td_ego_dir EMA — Text-only think (`bagel_mot`)
+
+| Subset | s1000 | s2000 | s3000 |
+|--------|-------|-------|-------|
+| PT2P (acc) | 55.3 | 68.1 | -- |
+| SV (acc) | 57.6 | 66.2 | 68.7 |
+| SV (F1) | 35.4 | 58.9 | 64.8 |
 
 > Partial results — remaining jobs were cancelled before completion (replaced by nothink eval).
 
-### VCoT l32 td_ego_dir — No-think (`bagel_mot_nothink`)
+### VCoT l32 td_ego_dir noEMA — No-think (`bagel_mot_nothink`)
+
+> Results pending — eval jobs submitted, running.
+
+### VCoT l32 td_ego_dir EMA — No-think (`bagel_mot_nothink`)
 
 > Results pending — eval jobs submitted, running.
 
