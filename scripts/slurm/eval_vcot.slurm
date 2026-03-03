@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=240G
-#SBATCH --time=04:00:00
+#SBATCH --time=08:00:00
 #SBATCH --output=slurm_logs/%x_%j.out
 
 # Eval VCoT/MMCoT checkpoint on a single subset (uses bagel_mot_vcot config)
@@ -15,6 +15,8 @@ SUBSET=${2:?Usage: sbatch eval_vcot.slurm <ckpt_path> <subset>}
 
 module load conda
 conda activate /gpfs/projects/krishna/envs/thinkmorph
+
+export HF_HOME=/gpfs/scrubbed/linjli/hf_cache
 
 cd /gpfs/home/linjli/source/SpatialReasoning_train
 source scripts/preflight.sh
