@@ -4,7 +4,7 @@
 #SBATCH --nodes=1
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=240G
-#SBATCH --time=08:00:00
+#SBATCH --time=12:00:00
 #SBATCH --output=slurm_logs/%x_%j.out
 
 # Eval VCoT/MMCoT checkpoint on a single subset (uses bagel_mot_vcot config)
