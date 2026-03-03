@@ -2,6 +2,8 @@
 
 Back to [Eval Results Index](eval_results.md)
 
+> **Data freshness**: Last updated 2026-03-03. Markers: **+** = answer extraction rate <90% (EMA not converged). VCoT l64 and MMCoT training still running; results beyond s15000/s9000 respectively pending. VCoT l64 td_path/td_path_arrow evals at s9000-s15000 were cancelled to free GPUs — only dh_midpoint and SAT_perspective available at those steps. MMCoT s12000/s15000 evals incomplete (partial pkl files only).
+
 ## Figures
 
 ![td_path training curves — noEMA vs EMA for all models](figures/td_path_training_curves.png)
@@ -128,8 +130,8 @@ Training extended to 25k steps (save_every=3000 from s3000 onward).
 
 | Subset | s3000 | s6000 | s9000 | s12000 | s15000 | s18000 | s21000 | s24000 |
 |--------|-------|-------|-------|--------|--------|--------|--------|--------|
-| td_path | 65.04 | 64.47 | 66.04 | **66.73** | 62.22 | 61.65 | 60.90 | -- |
-| td_path_arrow | 61.55 | **65.60** | 60.84 | 63.49 | 59.06 | 64.60 | 62.84 | -- |
+| td_path | 65.04 | 64.47 | 66.04 | **66.73** | 62.22 | 61.65 | 60.90 | 63.35 |
+| td_path_arrow | 61.55 | **65.60** | 60.84 | 63.49 | 59.06 | 64.60 | 62.84 | 59.26 |
 | dh_midpoint | **68.52** | 67.28 | 64.81 | 58.64 | 53.70 | 55.56 | 50.62 | 53.70 |
 | Perspective_Arrow | 52.51 | 51.80 | 47.14 | 49.28 | 45.71 | 49.28 | 43.93 | 50.00 |
 | Perspective_NoArrow | **53.57** | 52.15 | 51.79 | 52.86 | 48.93 | 48.21 | 41.43 | 45.36 |
@@ -139,16 +141,16 @@ Training extended to 25k steps (save_every=3000 from s3000 onward).
 
 | Subset | s3000 | s6000 | s9000 | s12000 | s15000 | s18000 | s21000 | s24000 |
 |--------|-------|-------|-------|--------|--------|--------|--------|--------|
-| td_path | -- | 49.44 | 58.46 | 59.21 | 62.97 | **63.16** | -- | -- |
-| td_path_arrow | -- | 44.07 | 57.53 | 59.25 | 60.84 | **63.49** | -- | -- |
+| td_path | 32.01+ | 49.44 | 58.46 | 59.21 | 62.97 | 63.16 | 62.41 | **63.72** |
+| td_path_arrow | 30.51+ | 44.07 | 57.53 | 59.25 | 60.84 | 63.49 | 59.26 | **61.73** |
 | dh_midpoint | 43.83 | **72.84** | 69.75 | 69.75 | 64.81 | 64.81 | 62.35 | 60.49 |
 | Perspective_Arrow | -- | **55.00** | **55.00** | 52.15 | 54.00 | 54.64 | 51.79 | **56.47** |
 | Perspective_NoArrow | -- | **58.33** | 52.15 | 49.64 | 49.29 | 54.29 | 50.00 | 49.64 |
 | SAT_perspective | -- | 50.00 | 50.00 | **51.52** | 48.48 | 40.91 | -- | -- |
 
-> Missing td_path/td_path_arrow at s3000 EMA, s21000, s24000: evals were still running at time of collection.
++Answer extraction rate <90% (EMA not converged at s3000).
 
-**TextCoT key findings**: noEMA peaks early (s3000-s12000) then degrades, especially on dh_midpoint (68.5% -> 50.6%). EMA lags noEMA by ~6000 steps but eventually converges (td_path 63.2% EMA s18000 vs 66.7% noEMA s12000). EMA dh_midpoint peaks at s6000 (72.8%) then steadily declines. Overall, TextCoT significantly underperforms AO on td_path (~66% vs ~86%).
+**TextCoT key findings**: noEMA peaks early (s3000-s12000) then degrades on dh_midpoint (68.5% → 50.6%), but partially recovers on td_path at s24000 (63.4%). EMA lags noEMA by ~6000 steps and continues improving through s24000, where it achieves best td_path (63.7%) — slightly above noEMA at the same step. At s24000 noEMA and EMA nearly converge on td_path (~63%). EMA dh_midpoint peaks at s6000 (72.8%) then steadily declines. Overall, TextCoT significantly underperforms AO on td_path (~64% vs ~86%).
 
 ---
 
@@ -252,7 +254,7 @@ Training extended to 25k steps (still running).
 | Model | Best noEMA | Best EMA |
 |-------|-----------|----------|
 | AO | 83.08 (s12000) | **86.09** (s18000) |
-| TextCoT | 66.73 (s12000) | 63.16 (s18000) |
+| TextCoT | 66.73 (s12000) | 63.72 (s24000) |
 | MMCoT | 56.77 (s6000) | 44.74 (s7000) |
 | VCoT l64 | 47.37 (s7000) | 40.04 (s7000) |
 

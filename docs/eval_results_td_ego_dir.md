@@ -2,6 +2,8 @@
 
 Back to [Eval Results Index](eval_results.md)
 
+> **Data freshness**: Last updated 2026-03-03. VCoT l32 image-gen PT2P evals are mostly **partial results** from timed-out 2-GPU runs (see partial table); only s1000 EMA has a full 8-GPU result. VCoT l32 SV image-gen s6k-s7k still running. VCoT l32 nothink/think evals are complete through s3k but not extended further (collapse makes later steps uninformative). AO td_ego_dir evals are complete through s10000.
+
 ## Figures
 
 ![AO td_ego_dir training curves — PT2P and SV](figures/ao_ego_dir_training_curves.png)
@@ -61,10 +63,10 @@ Training: VCoT with 512x512 output images (latent 32). Training still running.
 
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
 |--------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 47.4 | -- | -- | -- | -- |
-| SV (acc) | 55.6 | **60.6** | 57.1 | 57.1 | -- |
+| PT2P (acc) | 51.4 | -- | -- | -- | -- |
+| SV (acc) | 55.6 | **60.6** | 57.1 | 57.1 | 59.1 |
 
-> PT2P image-gen evals take ~11h (237s/sample diffusion). Resubmitted with 12h limit. SV s6k-s7k still running.
+> PT2P image-gen evals take ~11h (237s/sample diffusion). Only s1000 EMA PT2P complete (51.4%, 8-GPU re-run Mar 3). SV s6k-s7k still running.
 
 ### VCoT l32 td_ego_dir noEMA — Text-only think (`bagel_mot`)
 
@@ -104,11 +106,11 @@ Training: VCoT with 512x512 output images (latent 32). Training still running.
 
 ### VCoT l32 td_ego_dir — VCoT image gen PT2P partial results
 
-Early accuracy from partial pkl files (timed-out 2-GPU runs). Full 8-GPU resubmission pending.
+Early accuracy from partial pkl files (timed-out 2-GPU runs). s1k EMA now has full 8-GPU result (51.4%, see table above).
 
 | Checkpoint | noEMA | EMA | Samples |
 |------------|-------|-----|---------|
-| s1k | 50.0 | 47.4 (full) | 230/329 |
+| s1k | 50.0 | **51.4** (full, 8-GPU) | 230/329 (noEMA partial) |
 | s2k | 55.5 | 55.5 | 220/329 |
 | s3k | **60.5** | **61.8** | 220/329 |
 | s4k | 59.5 | **62.3** | 220/329 |
