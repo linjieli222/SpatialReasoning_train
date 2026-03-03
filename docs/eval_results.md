@@ -318,11 +318,21 @@ Training: VCoT with 512x512 output images (latent 32). Training still running.
 
 ### VCoT l32 td_ego_dir noEMA — VCoT image gen (`bagel_mot_vcot`)
 
-> Results pending — eval jobs still running (~3-4h per job).
+| Subset | s1000 | s2000 | s3000 | s4000 |
+|--------|-------|-------|-------|-------|
+| PT2P (acc) | -- | -- | -- | -- |
+| SV (acc) | 67.2 | -- | -- | -- |
+| SV (F1) | 61.1 | -- | -- | -- |
 
 ### VCoT l32 td_ego_dir EMA — VCoT image gen (`bagel_mot_vcot`)
 
-> Results pending — eval jobs still running (~3-4h per job).
+| Subset | s1000 | s2000 | s3000 | s4000 |
+|--------|-------|-------|-------|-------|
+| PT2P (acc) | -- | -- | -- | -- |
+| SV (acc) | 55.6 | -- | -- | -- |
+| SV (F1) | 41.3 | -- | -- | -- |
+
+> Partial results — remaining eval jobs still running (~1h left for s1k-s3k, ~3h for s4k).
 
 ### VCoT l32 td_ego_dir noEMA — Text-only think (`bagel_mot`)
 
