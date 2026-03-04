@@ -1,0 +1,21 @@
+unified_edit:
+  dataset_names:
+  - tifa_v3_td_ego_dir                    # VCoT (sideview generation)
+  - tifa_v3_td_ego_dir_answer_only_think  # AO with VCoT system prompt
+  image_transform_args:
+    image_stride: 16
+    max_image_size: 1024
+    min_image_size: 512
+  vit_image_transform_args:
+    image_stride: 14
+    max_image_size: 518
+    min_image_size: 224
+  output_image_transform_args:
+    image_stride: 16
+    max_image_size: 512
+    min_image_size: 256
+  is_mandatory: True
+  num_used_data:
+  - 11204   # VCoT samples
+  - 11204   # AO samples
+  weight: 1

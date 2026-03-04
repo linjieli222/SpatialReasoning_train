@@ -54,7 +54,7 @@ VLM_ANSWER_ONLY_SYSTEM_PROMPT = '''
 Answer the question. Conclude with the final answer wrapped in <answer></answer> tags, i.e.<answer> answer here </answer>.
 '''
 
-VARIANTS = ["default", "answer_only", "mmcot", "text_cot"]
+VARIANTS = ["default", "answer_only", "answer_only_think", "mmcot", "text_cot"]
 
 ALL_CONFIGS = [
     "dh_midpoint",
@@ -202,6 +202,21 @@ def transform_item_answer_only(item):
     return result
 
 
+def transform_item_answer_only_think(item):
+    """Answer-only with VCoT system prompt — no thinking, no image gen."""
+    image_list = _get_input_images(item)
+    num_input_images = len(image_list)
+    instruction_list = _build_instruction_list(item, VLM_THINK_SYSTEM_PROMPT)
+    answer = item.get('answer', '')
+    output_text_list = [f"<answer>{answer}</answer>"]
+    return {
+        "image_list": image_list,
+        "num_input_images": num_input_images,
+        "instruction_list": instruction_list,
+        "output_text_list": output_text_list,
+    }
+
+
 def make_transform_item_mmcot(mmcot_lookup):
     """Create mmcot transform with pre-loaded lookup dict."""
     def transform_item_mmcot(item):
@@ -281,6 +296,7 @@ def make_transform_item_text_cot(textcot_lookup):
 TRANSFORM_FNS = {
     "default": transform_item_default,
     "answer_only": transform_item_answer_only,
+    "answer_only_think": transform_item_answer_only_think,
     # "mmcot" and "text_cot" are handled specially in process_config
 }
 
