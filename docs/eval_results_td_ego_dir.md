@@ -186,11 +186,11 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 
 ### VCoT image gen (`bagel_mot_vcot`) — EMA
 
-| Subset | s1000 | s2000 | s3000 |
-|--------|-------|-------|-------|
-| PT2PV2 (acc) | **50.4** | 43.4 | 44.2 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2PV2 (acc) | 50.4 | 43.4 | 44.2 | 52.2 | **54.9** |
 
-> **Key result: Mixed training prevents VCoT collapse.** Think PT2PV2 peaks at **s4k (70.8%)**, nothink at **s3k-s5k (70.8%)** — no collapse unlike pure VCoT. Nothink also generalizes to td_path (63.3%) and td_path_arrow (63.2%). VCoT image-gen peaks at s1k (50.4%) then drops. VCoT nothink evals for s1k-s5k in progress.
+> **Key result: Mixed training prevents VCoT collapse.** Think PT2PV2 peaks at **s4k (70.8%)**, nothink at **s3k-s5k (70.8%)** — no collapse unlike pure VCoT. Nothink generalizes to td_path (63.3%) and td_path_arrow (63.2%). VCoT image-gen improves to **s5k (54.9%)** after initial dip.
 
 ---
 
@@ -204,18 +204,20 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). Tr
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
 |--------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 |
-| SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | -- | **63.1** |
-| SV (F1) | 43.5 | 53.3 | 56.8 | 61.3 | -- | **62.4** |
+| PT2PV2 (acc) | 38.1 | 45.1 | 53.1 | -- | -- | -- |
+| SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | 64.6 | 63.1 |
+| SV (F1) | 43.5 | 53.3 | 56.8 | 61.3 | **63.9** | 62.4 |
 
 ### No-think (`bagel_mot_nothink`) — EMA
 
-| Subset | s6000 |
-|--------|-------|
-| PT2P (acc) | 63.2 |
-| SV (acc) | 64.1 |
-| SV (F1) | 62.8 |
+| Subset | s1000 | s2000 | s6000 |
+|--------|-------|-------|-------|
+| PT2P (acc) | 47.7 | -- | **63.2** |
+| PT2PV2 (acc) | 38.9 | 41.6 | -- |
+| SV (acc) | 51.5 | -- | **64.1** |
+| SV (F1) | 42.6 | -- | **62.8** |
 
-> PT2P peaks at **s5k (67.8%)** then dips slightly at s6k. SV improves steadily through s6k. Nothink at s6k (63.2% PT2P, 64.1% SV) is close to think performance. PT2PV2 evals pending. s5k SV and nothink s1k-s5k evals pending.
+> PT2P peaks at **s5k (67.8%)** then dips at s6k. SV peaks at **s5k (64.6%/F1=63.9)**. Nothink at s6k (63.2% PT2P, 64.1% SV) is close to think performance. Nothink s3k-s5k evals pending.
 
 ---
 
