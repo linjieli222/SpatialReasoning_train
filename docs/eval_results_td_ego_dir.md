@@ -201,23 +201,23 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). Tr
 
 ### Think (`bagel_mot`) — EMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
-|--------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 |
-| PT2PV2 (acc) | 38.1 | 45.1 | 53.1 | -- | -- | -- |
-| SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | 64.6 | 63.1 |
-| SV (F1) | 43.5 | 53.3 | 56.8 | 61.3 | **63.9** | 62.4 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 | 63.2 |
+| PT2PV2 (acc) | 38.1 | 45.1 | 53.1 | -- | -- | -- | -- |
+| SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | 64.6 | 63.1 | **64.6** |
+| SV (F1) | 43.5 | 53.3 | 56.8 | 61.3 | 63.9 | 62.4 | **64.2** |
 
 ### No-think (`bagel_mot_nothink`) — EMA
 
-| Subset | s1000 | s2000 | s6000 |
-|--------|-------|-------|-------|
-| PT2P (acc) | 47.7 | -- | **63.2** |
-| PT2PV2 (acc) | 38.9 | 41.6 | -- |
-| SV (acc) | 51.5 | -- | **64.1** |
-| SV (F1) | 42.6 | -- | **62.8** |
+| Subset | s1000 | s2000 | s3000 | s6000 |
+|--------|-------|-------|-------|-------|
+| PT2P (acc) | 47.7 | 56.5 | -- | **63.2** |
+| PT2PV2 (acc) | 38.9 | 41.6 | 47.8 | -- |
+| SV (acc) | 51.5 | 55.1 | -- | **64.1** |
+| SV (F1) | 42.6 | 51.6 | -- | **62.8** |
 
-> PT2P peaks at **s5k (67.8%)** then dips at s6k. SV peaks at **s5k (64.6%/F1=63.9)**. Nothink at s6k (63.2% PT2P, 64.1% SV) is close to think performance. Nothink s3k-s5k evals pending.
+> PT2P peaks at **s5k (67.8%)** then dips at s6k-s7k. SV peaks at **s7k (64.6%/F1=64.2)**. Nothink steadily improves (s1k 47.7% → s6k 63.2% PT2P). Nothink s4k-s5k evals pending.
 
 ---
 
@@ -230,9 +230,10 @@ Training: Multimodal CoT with sideview generation + text reasoning. 10k steps, l
 
 | Subset | s1000 | s2000 | s3000 | s4000 |
 |--------|-------|-------|-------|-------|
+| PT2P (acc) | 48.0 | -- | -- | -- |
 | PT2PV2 (acc) | 33.6 | 39.8 | 52.2 | **59.3** |
 | SV (acc) | 52.0 | 60.1 | 66.2 | **68.7** |
 | SV (F1) | 42.9 | 56.2 | 64.0 | **66.9** |
 
-> MMCoT nothink improves steadily through s4k. SV at s4k (68.7%) approaches AO levels. PT2PV2 at 59.3% at s4k. Training ongoing.
+> MMCoT nothink improves steadily through s4k. SV at s4k (68.7%) approaches AO levels. PT2PV2 at 59.3% at s4k. PT2P s2k-s4k evals in progress. Training ongoing.
 
