@@ -243,6 +243,18 @@ DATASET_INFO = {
             'num_total_samples': 11204,
             'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_dir_answer_only_think.json',
         },
+        'tifa_v3_td_ego_dir_text_cot': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_dir_text_cot',
+            'num_files': 5,
+            'num_total_samples': 11204,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_dir_text_cot.json',
+        },
+        'tifa_v3_td_ego_dir_mmcot': {
+            'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_dir_mmcot',
+            'num_files': 5,
+            'num_total_samples': 11204,
+            'parquet_info_path': '/gpfs/projects/krishna/linjli/bagel_example/editing/parquet_info/tifa_train_v3_td_ego_dir_mmcot.json',
+        },
         'tifa_v3_td_ego_dir_arrow': {
             'data_dir': '/gpfs/projects/krishna/linjli/bagel_example/editing/tifa_train_v3_td_ego_dir_arrow',
             'num_files': 5,
