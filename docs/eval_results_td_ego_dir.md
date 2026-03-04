@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-03. VCoT l32 image-gen evals complete through s8k for SV (F1), s5k EMA for PT2P (full). s6k eval in progress. AO td_ego_dir evals complete through s10000. Two new VCoT trainings launched: mse_weight=2 and mse_weight=5. Mixed VCoT+AO and self-forcing experiments launched.
+> **Data freshness**: Last updated 2026-03-04. VCoT l32 image-gen evals complete through s8k for both SV (F1) and PT2P (acc). AO td_ego_dir evals complete through s10000. VCoT mse2/mse5 s1k evals complete. Mixed VCoT+AO, self-forcing, TextCoT, and MMCoT experiments launched.
 
 ## Figures
 
@@ -65,10 +65,10 @@ The model generates sideview images as visual thoughts (`<think>desc</think><ima
 
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 51.4 | 52.0 | 60.5 | 61.4 | **58.1** | -- | -- | -- |
+| PT2P (acc) | 51.4 | 52.0 | 60.5 | 61.4 | 58.1 | 58.4 | **64.4** | 61.7 |
 | SV (F1) | 47.3 | 70.1 | 85.7 | 83.0 | 84.4 | 83.7 | **87.0** | 85.1 |
 
-> PT2P image-gen evals complete through s5k EMA. SV evals complete through s8k. Best SV F1: **87.0** at s7k (both ema/noema). PT2P peaks at s4k (61.4%), dips slightly at s5k (58.1%).
+> PT2P and SV image-gen evals complete through s8k EMA. Best SV F1: **87.0** at s7k (both ema/noema). PT2P peaks at **s7k (64.4%)**, recovering from the s5k dip. SV and PT2P peaks align at s7k.
 
 ### VCoT l32 td_ego_dir — VCoT prefill (`bagel_mot_vcot_prefill`)
 
@@ -120,19 +120,36 @@ VCoT-trained model evaluated with **ground-truth sideview images prefilled** as 
 
 ### VCoT l32 td_ego_dir — VCoT image gen PT2P partial results
 
-s1k-s4k EMA have full official results (see table above). Remaining are early estimates from partial pkl files.
+s1k-s8k EMA now have full official results (see table above). noEMA results are partial estimates from pkl files.
 
-| Checkpoint | noEMA | EMA | Samples |
-|------------|-------|-----|---------|
-| s1k | -- | 51.4 (full) | 329/329 |
-| s2k | -- | 52.0 (full) | 329/329 |
-| s3k | -- | 60.5 (full) | 329/329 |
-| s4k | 59.6 | **61.4** (full) | 220/329 (noEMA partial) |
-| s5k | 56.7 | 59.1 | 220-240/329 |
-| s6k | 48.3 | 51.7 | 60/329 |
-| s7k | 60.0 | 58.3 | 60/329 |
+| Checkpoint | noEMA (partial) | EMA (full) |
+|------------|-----------------|------------|
+| s4k | 59.6 (220/329) | 61.4 |
+| s5k | 56.7 (220-240/329) | 58.1 |
 
-> VCoT image-gen PT2P peaks around s3k-s4k at ~61%, well below GT prefill (90.3%), confirming sideview generation quality is the bottleneck. s6k-s7k partial results (60/329) are unreliable due to low coverage.
+> VCoT image-gen PT2P peaks at **s7k (64.4%)**, well below GT prefill (90.3%), confirming sideview generation quality is the bottleneck.
+
+---
+
+## VCoT l32 td_ego_dir — mse_weight variants
+
+Ablation on MSE loss weight. All use same VCoT l32 config, only `--mse_weight` differs.
+
+Base dir: `.../tifa_v3_td_ego_dir_vcot_l32/vcot_td_ego_dir_{mse2,mse5}_8gpu/`
+
+### VCoT mse2 EMA — VCoT image gen (`bagel_mot_vcot`)
+
+| Subset | s1000 |
+|--------|-------|
+| PT2P (acc) | 47.7 |
+
+### VCoT mse5 EMA — VCoT image gen (`bagel_mot_vcot`)
+
+| Subset | s1000 |
+|--------|-------|
+| PT2P (acc) | 49.8 |
+
+> Both mse2 and mse5 underperform the default mse1 at s1k (51.4% PT2P). Higher MSE weight slows down the text reasoning improvement early in training. Training stopped at s5k for both variants.
 
 ---
 
