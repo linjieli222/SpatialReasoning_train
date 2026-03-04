@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. VCoT l32 image-gen evals complete through s8k for both SV (F1) and PT2P (acc). AO td_ego_dir evals complete through s10000. VCoT mse2/mse5 s1k evals complete. Mixed VCoT+AO, self-forcing, TextCoT, and MMCoT experiments launched.
+> **Data freshness**: Last updated 2026-03-04. VCoT l32 image-gen evals complete through s8k for both SV (F1) and PT2P (acc). AO td_ego_dir evals complete through s10000. VCoT mse2/mse5 s1k evals complete. TextCoT EMA evals partial (s1k-s2k done, s3k-s5k running). Mixed VCoT+AO, self-forcing, and MMCoT experiments launched.
 
 ## Figures
 
@@ -152,6 +152,23 @@ Base dir: `.../tifa_v3_td_ego_dir_vcot_l32/vcot_td_ego_dir_{mse2,mse5}_8gpu/`
 | PT2P (acc) | 49.8 |
 
 > Both mse2 and mse5 underperform the default mse1 at s1k (51.4% PT2P). Higher MSE weight slows down the text reasoning improvement early in training. Training stopped at s5k for both variants.
+
+---
+
+## TextCoT td_ego_dir
+
+Config: `bagel_mot` (text-only, think=True) | Base dir: `.../tifa_v3_td_ego_dir_text_cot/textcot_td_ego_dir_8gpu/`
+Training: TextCoT with text chain-of-thought reasoning (no image generation). 10k steps on td_ego_dir subset.
+
+### TextCoT td_ego_dir EMA — Think (`bagel_mot`)
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 50.8 | 59.6 | -- | -- | -- |
+| SV (acc) | 52.0 | 56.6 | -- | -- | -- |
+| SV (F1) | 43.5 | 53.3 | -- | -- | -- |
+
+> Partial results — s3k-s5k evals in progress (job 67619). Model skews heavily toward predicting 'B' at s1k (177/198), improving at s2k. PT2P starting low (50.8%) but improving.
 
 ---
 
