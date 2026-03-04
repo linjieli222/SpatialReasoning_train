@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 image-gen complete through s8k. TextCoT EMA think evals through s6k (partial — s4k SV, s5k pending). MMCoT EMA nothink evals through s4k (s3k SV pending). Nothink + PT2PV2 evals in progress for TextCoT and VCoT.
+> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 image-gen complete through s8k. VCoT nothink PT2PV2 complete (s1k-s8k). TextCoT EMA think through s6k (s5k pending). MMCoT EMA nothink through s4k. Mixed VCoT+AO PT2PV2 through s3k. TextCoT nothink + PT2PV2 evals in progress.
 
 ## Figures
 
@@ -120,6 +120,14 @@ VCoT-trained model evaluated with **ground-truth sideview images prefilled** as 
 
 > **Pattern**: Similar rise-then-collapse as VCoT l64 but at s3k instead of s12k. noEMA collapses completely (0.0% PT2P), EMA partially (34.7% PT2P). VCoT commitment strengthens rapidly between s2k-s3k for ego_dir variant.
 
+### VCoT l32 td_ego_dir EMA — No-think PT2PV2 (`bagel_mot_nothink`)
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| PT2PV2 (acc) | 43.4 | **61.1** | 25.7 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+
+> Same collapse pattern on PT2PV2: peaks at s2k (61.1%), crashes to 0% by s4k. Confirms VCoT commitment is not eval-subset-specific.
+
 ### VCoT l32 td_ego_dir — VCoT image gen PT2P partial results
 
 s1k-s8k EMA now have full official results (see table above). noEMA results are partial estimates from pkl files.
@@ -155,6 +163,21 @@ Base dir: `.../tifa_v3_td_ego_dir_vcot_l32/vcot_td_ego_dir_{mse2,mse5}_8gpu/`
 
 ---
 
+## Mixed VCoT+AO td_ego_dir
+
+Config: mixed `bagel_mot_vcot` system prompt for both VCoT and AO samples | Base dir: `.../tifa_v3_td_ego_dir_mixed/mixed_vcot_ao_td_ego_dir_8gpu/`
+Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system prompt). Designed to prevent VCoT commitment collapse.
+
+### Mixed VCoT+AO td_ego_dir EMA — VCoT image gen (`bagel_mot_vcot`)
+
+| Subset | s1000 | s2000 | s3000 |
+|--------|-------|-------|-------|
+| PT2PV2 (acc) | **50.4** | 43.4 | 44.2 |
+
+> Early results only. PT2P vcot image-gen evals still running for s4k-s5k. Nothink and RealPT evals in progress.
+
+---
+
 ## TextCoT td_ego_dir
 
 Config: `bagel_mot` (text-only, think=True) | Base dir: `.../tifa_v3_td_ego_dir_text_cot/textcot_td_ego_dir_8gpu/`
@@ -165,10 +188,10 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
 |--------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | -- | **65.7** |
-| SV (acc) | 52.0 | 56.6 | 58.6 | -- | -- | **63.1** |
-| SV (F1) | 43.5 | 53.3 | 56.8 | -- | -- | **62.4** |
+| SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | -- | **63.1** |
+| SV (F1) | 43.5 | 53.3 | 56.8 | 61.3 | -- | **62.4** |
 
-> Steady improvement through s6k. PT2P reaches 65.7% at s6k — comparable to AO at s2k (77.5%) gap still large. s4k SV and s5k evals still running. Nothink and PT2PV2 evals pending.
+> Steady improvement through s6k. PT2P reaches 65.7% at s6k. SV improves consistently. s5k eval still running. Nothink and PT2PV2 evals pending.
 
 ---
 
@@ -182,10 +205,10 @@ Training: Multimodal CoT with sideview generation + text reasoning. 10k steps, l
 | Subset | s1000 | s2000 | s3000 | s4000 |
 |--------|-------|-------|-------|-------|
 | PT2PV2 (acc) | 33.6 | 39.8 | 52.2 | **59.3** |
-| SV (acc) | 52.0 | 60.1 | -- | **68.7** |
-| SV (F1) | 42.9 | 56.2 | -- | **66.9** |
+| SV (acc) | 52.0 | 60.1 | 66.2 | **68.7** |
+| SV (F1) | 42.9 | 56.2 | 64.0 | **66.9** |
 
-> MMCoT nothink improves steadily through s4k. SV at s4k (68.7%) approaches AO levels. PT2PV2 at 59.3% at s4k. s3k SV eval still running. Training ongoing.
+> MMCoT nothink improves steadily through s4k. SV at s4k (68.7%) approaches AO levels. PT2PV2 at 59.3% at s4k. Training ongoing.
 
 ---
 
