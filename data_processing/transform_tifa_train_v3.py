@@ -54,6 +54,11 @@ VLM_ANSWER_ONLY_SYSTEM_PROMPT = '''
 Answer the question. Conclude with the final answer wrapped in <answer></answer> tags, i.e.<answer> answer here </answer>.
 '''
 
+VLM_ANSWER_ONLY_THINK_SYSTEM_PROMPT = '''
+Let's think step by step to answer the question. For text-based thinking, enclose the process within <think> </think>, e.g. <think> thinking process here </think>. For visual thinking, enclose the content within <image_start> </image_end>, e.g. <image_start> thinking image here </image_end>. Finally conclude with the final answer wrapped in <answer></answer> tags, i.e.<answer> answer here </answer>.
+Answer only, and do not think with <think> or image thought.
+'''
+
 VARIANTS = ["default", "answer_only", "answer_only_think", "mmcot", "text_cot"]
 
 ALL_CONFIGS = [
@@ -206,7 +211,7 @@ def transform_item_answer_only_think(item):
     """Answer-only with VCoT system prompt — no thinking, no image gen."""
     image_list = _get_input_images(item)
     num_input_images = len(image_list)
-    instruction_list = _build_instruction_list(item, VLM_THINK_SYSTEM_PROMPT)
+    instruction_list = _build_instruction_list(item, VLM_ANSWER_ONLY_THINK_SYSTEM_PROMPT)
     answer = item.get('answer', '')
     output_text_list = [f"<answer>{answer}</answer>"]
     return {
