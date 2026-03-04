@@ -26,7 +26,7 @@ torchrun \
   --checkpoint_dir $ckpt_path \
   --lr 1e-5 \
   --num_workers 8 \
-  --max_latent_size 64 \
+  --max_latent_size 32 \
   --max_num_tokens 32768 \
   --max_num_tokens_per_sample 24576 \
   --expected_num_tokens 24576 \
