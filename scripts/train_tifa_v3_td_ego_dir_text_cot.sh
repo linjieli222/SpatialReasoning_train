@@ -1,6 +1,6 @@
 #!/bin/bash
 # td_ego_dir text CoT (11,204 samples, text-only chain-of-thought, no sideview generation)
-# ~16 samples/step, ~700 steps/epoch, 5 epochs ≈ 3500 steps
+# ~16 samples/step, ~700 steps/epoch, 10k steps
 
 resume_from=${resume_from:-"/gpfs/scrubbed/linjli/hf_cache/BAGEL-7B-MoT"}
 run_name=${run_name:-"textcot_td_ego_dir_8gpu"}
@@ -34,7 +34,7 @@ torchrun \
   --mse_weight 0 \
   --ce_weight 1 \
   --ema 0.999 \
-  --total_steps 3500 \
-  --save_every 500 \
+  --total_steps 10000 \
+  --save_every 1000 \
   --wandb_project tifa_v3 \
   --wandb_name textcot_td_ego_dir
