@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. VCoT l32 image-gen evals complete through s8k for both SV (F1) and PT2P (acc). AO td_ego_dir evals complete through s10000. VCoT mse2/mse5 s1k evals complete. TextCoT EMA evals partial (s1k-s2k done, s3k-s5k running). Mixed VCoT+AO, self-forcing, and MMCoT experiments launched.
+> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 image-gen complete through s8k. TextCoT EMA think evals through s6k (partial — s4k SV, s5k pending). MMCoT EMA nothink evals through s4k (s3k SV pending). Nothink + PT2PV2 evals in progress for TextCoT and VCoT.
 
 ## Figures
 
@@ -162,13 +162,30 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 
 ### TextCoT td_ego_dir EMA — Think (`bagel_mot`)
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
-|--------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 50.8 | 59.6 | -- | -- | -- |
-| SV (acc) | 52.0 | 56.6 | -- | -- | -- |
-| SV (F1) | 43.5 | 53.3 | -- | -- | -- |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
+|--------|-------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | -- | **65.7** |
+| SV (acc) | 52.0 | 56.6 | 58.6 | -- | -- | **63.1** |
+| SV (F1) | 43.5 | 53.3 | 56.8 | -- | -- | **62.4** |
 
-> Partial results — s3k-s5k evals in progress (job 67619). Model skews heavily toward predicting 'B' at s1k (177/198), improving at s2k. PT2P starting low (50.8%) but improving.
+> Steady improvement through s6k. PT2P reaches 65.7% at s6k — comparable to AO at s2k (77.5%) gap still large. s4k SV and s5k evals still running. Nothink and PT2PV2 evals pending.
+
+---
+
+## MMCoT td_ego_dir
+
+Config: `bagel_mot_vcot` (image generation, think=True) | Base dir: `.../tifa_v3_td_ego_dir_mmcot/mmcot_td_ego_dir_8gpu/`
+Training: Multimodal CoT with sideview generation + text reasoning. 10k steps, latent 32 (512x512 output).
+
+### MMCoT td_ego_dir EMA — No-think (`bagel_mot_nothink`)
+
+| Subset | s1000 | s2000 | s3000 | s4000 |
+|--------|-------|-------|-------|-------|
+| PT2PV2 (acc) | 33.6 | 39.8 | 52.2 | **59.3** |
+| SV (acc) | 52.0 | 60.1 | -- | **68.7** |
+| SV (F1) | 42.9 | 56.2 | -- | **66.9** |
+
+> MMCoT nothink improves steadily through s4k. SV at s4k (68.7%) approaches AO levels. PT2PV2 at 59.3% at s4k. s3k SV eval still running. Training ongoing.
 
 ---
 
