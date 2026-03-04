@@ -232,7 +232,7 @@ class PackedDataset(torch.utils.data.IterableDataset):
         # if the model is required to perform visual generation
         if len(sequence_status['packed_timesteps']) > 0:
             data['packed_timesteps'] = torch.tensor(sequence_status['packed_timesteps'])
-            data['mse_loss_indexes'] = torch.tensor(sequence_status['mse_loss_indexes'])
+            data['mse_loss_indexes'] = torch.tensor(sequence_status['mse_loss_indexes'], dtype=torch.long)
 
         # if the model is required to perform text generation
         if len(sequence_status['packed_label_ids']) > 0:
