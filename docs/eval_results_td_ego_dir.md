@@ -42,102 +42,99 @@ Training: 5 epochs on td_ego_dir subset. Training still running (s6k+ available)
 ## VCoT l32 td_ego_dir
 
 Config: `bagel_mot_vcot` (image generation, think=True) | Base dir: `.../tifa_v3_td_ego_dir_vcot_l32/vcot_td_ego_dir_8gpu/`
-Training: VCoT with 512x512 output images (latent 32). Training still running.
+Training: VCoT with 512x512 output images (latent 32). 8k steps completed.
 
-**Eval settings compared:**
+**Eval settings:**
 
-| Setting | Config | System Prompt | Image Gen | Description |
-|---------|--------|---------------|-----------|-------------|
-| VCoT (image gen) | `bagel_mot_vcot` | Think with `<think>` + `<image_start>` tags | Yes (512x512) | Full VCoT pipeline: model generates sideview image then answers |
-| Text-only think | `bagel_mot` | Think with `<think>` + `<image_start>` tags | No | Text-only output; model may output `<image_start>` but no image is generated |
-| No-think | `bagel_mot_nothink` | "Answer the question" (answer-only) | No | Answer-only prompt + "Do not think or generate any images." appended to question |
+| Setting | Config | Image Gen | Description |
+|---------|--------|-----------|-------------|
+| VCoT (image gen) | `bagel_mot_vcot` | Yes (512x512) | Full VCoT: generates sideview image then answers |
+| VCoT prefill | `bagel_mot_vcot_prefill` | Prefilled GT | GT sideview injected, model only answers |
+| Think (text-only) | `bagel_mot` | No | Text-only; model may output `<image_start>` but no image generated |
+| No-think | `bagel_mot_nothink` | No | Answer-only prompt, no thinking or image generation |
 
-### VCoT l32 td_ego_dir noEMA — VCoT image gen (`bagel_mot_vcot`)
+### VCoT image gen (`bagel_mot_vcot`)
 
-The model generates sideview images as visual thoughts (`<think>desc</think><image_start>[generated image]<image_end><answer>X</answer>`), then uses them to answer.
-
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
-|--------|-------|-------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | -- | -- | -- | -- | -- | -- | -- | -- |
-| SV (acc) | **66.2** | 55.1 | 55.1 | 57.1 | 58.1 | 55.6 | 60.6 | 59.1 |
-| SV (F1) | **65.6** | 54.5 | 54.1 | 55.5 | 59.2 | 54.2 | 59.4 | 57.9 |
-
-### VCoT l32 td_ego_dir EMA — VCoT image gen (`bagel_mot_vcot`)
+#### EMA
 
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | 51.4 | 52.0 | 60.5 | 61.4 | 58.1 | 58.4 | **64.4** | 61.7 |
-| SV (acc) | 54.5 | 55.6 | 57.1 | 57.1 | 59.1 | **60.1** | **60.1** | 58.1 |
-| SV (F1) | 52.2 | 56.8 | 55.5 | 56.1 | 58.3 | **59.5** | 58.8 | 56.9 |
+| SV (acc) | 55.6 | 60.6 | 57.1 | 57.1 | 59.1 | **60.1** | **60.1** | 58.1 |
+| SV (F1) | 52.8 | 60.5 | 55.5 | 56.1 | 58.3 | **59.5** | 58.8 | 56.9 |
+| RealPT path (acc) | -- | -- | -- | 34.5 | -- | -- | -- | -- |
+| RealPT arrow (acc) | -- | -- | -- | 36.7 | -- | -- | -- | -- |
 
-> PT2P and SV evals complete through s8k. PT2P peaks at **s7k (64.4%)**. SV accuracy peaks at s6k-s7k (~60%). Note: model skews heavily toward predicting 'A' (F1_A >> F1_B), inflating accuracy on A-heavy samples. Previous SV F1 values (83-87%) were incorrect due to a prediction extraction bug.
+#### noEMA
 
-### VCoT l32 td_ego_dir — VCoT prefill (`bagel_mot_vcot_prefill`)
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| SV (acc) | **67.2** | 55.1 | 55.1 | 57.1 | 58.1 | 55.6 | 60.6 | 59.1 |
+| SV (F1) | **66.3** | 54.5 | 54.1 | 55.5 | 59.2 | 54.2 | 59.4 | 57.9 |
 
-VCoT-trained model evaluated with **ground-truth sideview images prefilled** as visual thoughts. The model receives GT images in the `<think>` chain and only predicts the answer. This measures reasoning ability independent of image generation quality.
+> PT2P peaks at **s7k EMA (64.4%)**. SV peaks at s6k-s7k EMA (~60%). noEMA SV peaks at s1k then drops. Model skews toward predicting 'A'.
 
-| Mode | PT2P Accuracy | Samples |
-|------|--------------|---------|
-| vcot_prefill (s3k EMA) | **90.3%** | 271/300 (91% done) |
-| answer-only best (s6k EMA) | 80.9% | 329/329 |
-| vcot (s3k EMA) | 60.5% | 329/329 |
+### VCoT prefill (`bagel_mot_vcot_prefill`)
 
-> The ~30pp gap between vcot_prefill (90.3%) and end-to-end vcot (60.5%) confirms that **sideview generation quality is the bottleneck**, not the model's reasoning ability. The vcot_prefill result also exceeds the best answer-only result (80.9%) by ~10pp, showing that visual thoughts genuinely help when image quality is high.
+GT sideview images injected as visual thoughts — measures reasoning ability independent of image generation quality.
 
-### VCoT l32 td_ego_dir noEMA — Text-only think (`bagel_mot`)
+| Subset | Checkpoint | Accuracy | Samples |
+|--------|------------|----------|---------|
+| PT2P | s3k EMA | **90.9%** | 329 |
+| PT2PV2 | s7k EMA | **86.7%** | 113 (partial) |
+| AO best (reference) | s6k EMA | 80.9% | 329 |
+| VCoT end-to-end (reference) | s3k EMA | 60.5% | 329 |
 
-| Subset | s1000 | s2000 | s3000 |
-|--------|-------|-------|-------|
-| PT2P (acc) | 71.7 | -- | -- |
-| SV (acc) | 67.2 | 68.2 | -- |
-| SV (F1) | 62.0 | 60.8 | -- |
+> The ~30pp gap between prefill (90.9%) and end-to-end VCoT (60.5%) confirms **sideview generation quality is the bottleneck**. Prefill exceeds AO best (80.9%) by ~10pp, showing visual thoughts genuinely help when image quality is high.
 
-### VCoT l32 td_ego_dir EMA — Text-only think (`bagel_mot`)
+### Think text-only (`bagel_mot`)
+
+#### EMA
 
 | Subset | s1000 | s2000 | s3000 |
 |--------|-------|-------|-------|
 | PT2P (acc) | 55.3 | 68.1 | -- |
 | SV (acc) | 57.6 | 66.2 | 68.7 |
-| SV (F1) | 35.4 | 58.9 | 64.8 |
+| SV (F1) | 51.9 | 65.1 | 68.3 |
+| RealPT path (acc) | 30.5 | 0.0 | 0.0 |
+| RealPT arrow (acc) | 47.5 | 0.0 | 0.0 |
 
-> Partial results — remaining jobs were cancelled before completion (replaced by nothink eval).
+#### noEMA
 
-### VCoT l32 td_ego_dir noEMA — No-think (`bagel_mot_nothink`)
+| Subset | s1000 | s2000 |
+|--------|-------|-------|
+| PT2P (acc) | 71.7 | -- |
+| SV (acc) | 67.2 | 68.2 |
+| SV (F1) | 66.5 | 67.4 |
+| RealPT path (acc) | 9.2 | 0.0 |
+| RealPT arrow (acc) | 11.4 | 0.0 |
+
+> Text-only think mode: model outputs `<image_start>` and stops producing answers after s1k-s2k. RealPT drops to 0% as model commits to image generation. Partial results only (replaced by nothink eval).
+
+### No-think (`bagel_mot_nothink`)
+
+#### EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 56.5 | **74.5** | 34.7 | -- | -- | -- | 0.0 | -- |
+| PT2PV2 (acc) | 43.4 | **61.1** | 25.7 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| SV (acc) | 56.6 | **64.6** | 34.3 | -- | -- | -- | 0.0 | -- |
+| SV (F1) | 49.5 | **63.4** | 44.3 | -- | -- | -- | 0.0 | -- |
+| RealPT path (acc) | 45.4 | **46.6** | 43.1 | 6.9 | -- | -- | -- | -- |
+| RealPT arrow (acc) | **65.8** | **68.4** | -- | 3.8 | -- | -- | -- | -- |
+
+#### noEMA
 
 | Subset | s1000 | s2000 | s3000 |
 |--------|-------|-------|-------|
 | PT2P (acc) | **72.0** | 71.7 | 0.0 |
 | SV (acc) | 67.2 | **68.7** | 0.5 |
-| SV (F1) | 62.4 | **67.4** | 0.0 |
+| SV (F1) | 66.6 | **69.9** | 1.0 |
+| RealPT path (acc) | **47.1** | 46.6 | 0.0 |
+| RealPT arrow (acc) | **68.4** | 59.5 | 0.0 |
 
-### VCoT l32 td_ego_dir EMA — No-think (`bagel_mot_nothink`)
-
-| Subset | s1000 | s2000 | s3000 |
-|--------|-------|-------|-------|
-| PT2P (acc) | 56.5 | **74.5** | 34.7 |
-| SV (acc) | 56.6 | **64.6** | 34.3 |
-| SV (F1) | 30.6 | **56.8** | 44.9 |
-
-> **Pattern**: Similar rise-then-collapse as VCoT l64 but at s3k instead of s12k. noEMA collapses completely (0.0% PT2P), EMA partially (34.7% PT2P). VCoT commitment strengthens rapidly between s2k-s3k for ego_dir variant.
-
-### VCoT l32 td_ego_dir EMA — No-think PT2PV2 (`bagel_mot_nothink`)
-
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
-|--------|-------|-------|-------|-------|-------|-------|-------|-------|
-| PT2PV2 (acc) | 43.4 | **61.1** | 25.7 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
-
-> Same collapse pattern on PT2PV2: peaks at s2k (61.1%), crashes to 0% by s4k. Confirms VCoT commitment is not eval-subset-specific.
-
-### VCoT l32 td_ego_dir — VCoT image gen PT2P partial results
-
-s1k-s8k EMA now have full official results (see table above). noEMA results are partial estimates from pkl files.
-
-| Checkpoint | noEMA (partial) | EMA (full) |
-|------------|-----------------|------------|
-| s4k | 59.6 (220/329) | 61.4 |
-| s5k | 56.7 (220-240/329) | 58.1 |
-
-> VCoT image-gen PT2P peaks at **s7k (64.4%)**, well below GT prefill (90.3%), confirming sideview generation quality is the bottleneck.
+> **Rise-then-collapse**: Peaks at s2k, collapses by s3k. noEMA collapses completely (0.0%), EMA partially (34.7% PT2P). Same pattern on PT2PV2 and RealPT. VCoT commitment strengthens rapidly between s2k-s3k.
 
 ---
 
