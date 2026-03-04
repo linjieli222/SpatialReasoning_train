@@ -59,16 +59,18 @@ The model generates sideview images as visual thoughts (`<think>desc</think><ima
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | -- | -- | -- | -- | -- | -- | -- | -- |
-| SV (F1) | 67.5 | 78.8 | 81.7 | 85.7 | 80.2 | 83.7 | **87.0** | 86.4 |
+| SV (acc) | **66.2** | 55.1 | 55.1 | 57.1 | 58.1 | 55.6 | 60.6 | 59.1 |
+| SV (F1) | **65.6** | 54.5 | 54.1 | 55.5 | 59.2 | 54.2 | 59.4 | 57.9 |
 
 ### VCoT l32 td_ego_dir EMA — VCoT image gen (`bagel_mot_vcot`)
 
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | 51.4 | 52.0 | 60.5 | 61.4 | 58.1 | 58.4 | **64.4** | 61.7 |
-| SV (F1) | 47.3 | 70.1 | 85.7 | 83.0 | 84.4 | 83.7 | **87.0** | 85.1 |
+| SV (acc) | 54.5 | 55.6 | 57.1 | 57.1 | 59.1 | **60.1** | **60.1** | 58.1 |
+| SV (F1) | 52.2 | 56.8 | 55.5 | 56.1 | 58.3 | **59.5** | 58.8 | 56.9 |
 
-> PT2P and SV image-gen evals complete through s8k EMA. Best SV F1: **87.0** at s7k (both ema/noema). PT2P peaks at **s7k (64.4%)**, recovering from the s5k dip. SV and PT2P peaks align at s7k.
+> PT2P and SV evals complete through s8k. PT2P peaks at **s7k (64.4%)**. SV accuracy peaks at s6k-s7k (~60%). Note: model skews heavily toward predicting 'A' (F1_A >> F1_B), inflating accuracy on A-heavy samples. Previous SV F1 values (83-87%) were incorrect due to a prediction extraction bug.
 
 ### VCoT l32 td_ego_dir — VCoT prefill (`bagel_mot_vcot_prefill`)
 
