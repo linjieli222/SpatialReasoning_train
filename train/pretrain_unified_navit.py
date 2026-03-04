@@ -634,6 +634,12 @@ def main():
                 data.pop('packed_vae_token_indexes', None)
                 data.pop('packed_timesteps', None)
                 data.pop('mse_loss_indexes', None)
+            # Pass self-forcing config if enabled
+            if training_args.self_force:
+                data['self_force_config'] = {
+                    'steps': training_args.self_force_steps,
+                    'ratio': training_args.self_force_ratio,
+                }
             loss_dict = fsdp_model(**data)
 
         loss = 0
