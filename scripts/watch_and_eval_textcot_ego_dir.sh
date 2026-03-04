@@ -56,6 +56,17 @@ run_once() {
             LAST_JOBID=${EVAL_JOBID}
         done
 
+        # PT2PV2 evals (think + nothink) — chained after nothink evals
+        for config in bagel_mot bagel_mot_nothink; do
+            short_config=$(echo $config | sed 's/bagel_mot_nothink/nothink/; s/bagel_mot/think/')
+            short_step=${step#000}; short_step=${short_step#0}
+            jobname="eval_textcot_s${short_step}_ema_${short_config}_pt2pv2"
+            EVAL_JOBID=$(sbatch --parsable --dependency=afterany:${LAST_JOBID} \
+                --job-name=${jobname} ${EVAL_SLURM} ${CKPT_EMA} AI2ThorPT2PV2_td_ego_dir ${config})
+            echo "  PT2PV2 ${short_config} eval: ${EVAL_JOBID} (${jobname})"
+            LAST_JOBID=${EVAL_JOBID}
+        done
+
         echo "$step" >> ${PROCESSED}
     done
 }
