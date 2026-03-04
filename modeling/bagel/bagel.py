@@ -222,16 +222,8 @@ class Bagel(PreTrainedModel):
                             packed_gen_token_indexes=packed_vae_token_indexes,
                         )
 
-                    # Build attention mask (may already exist from above)
-                    if nested_attention_masks is None:
-                        sf_sparse = create_sparse_mask(sample_lens, split_lens, attn_modes, x_t.device)
-                        sf_seqlen = sum(sample_lens)
-                        sf_attention_mask = create_block_mask(
-                            sf_sparse, B=1, H=self.num_heads, Q_LEN=sf_seqlen, KV_LEN=sf_seqlen,
-                            device=x_t.device, BLOCK_SIZE=128, _compile=True,
-                        )
-                    else:
-                        sf_attention_mask = nested_attention_masks
+                    # Reuse attention mask computed earlier (lines 157-166)
+                    sf_attention_mask = attention_mask
 
                     for i, t_val in enumerate(ts[:-1]):
                         # Timestep: t_val for output tokens, 0 for input tokens
