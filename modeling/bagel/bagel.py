@@ -122,6 +122,8 @@ class Bagel(PreTrainedModel):
         packed_vae_token_indexes: Optional[torch.LongTensor] = None,
         packed_timesteps: Optional[torch.LongTensor] = None,
         mse_loss_indexes: Optional[torch.BoolTensor] = None,
+        # for self-forcing
+        self_force_config: Optional[dict] = None,
     ) -> torch.Tensor:
         """
         Args:
@@ -186,6 +188,84 @@ class Bagel(PreTrainedModel):
                 latent = torch.einsum("chpwq->hwpqc", latent).reshape(-1, p * p * self.latent_channel)
                 packed_latent.append(latent)
             packed_latent_clean = torch.cat(packed_latent, dim=0)
+
+            # --- Self-forcing: predict clean latent via denoising loop ---
+            if self_force_config is not None:
+                sf_steps = self_force_config['steps']
+                sf_ratio = self_force_config['ratio']
+
+                # Identify output image tokens (input images have timestep=-inf)
+                is_output = ~torch.isinf(packed_timesteps)
+
+                with torch.no_grad():
+                    # Start: clean for input tokens, noise for output tokens
+                    x_t = packed_latent_clean.clone()
+                    x_t[is_output] = torch.randn(
+                        is_output.sum(), packed_latent_clean.shape[1],
+                        device=packed_latent_clean.device, dtype=packed_latent_clean.dtype,
+                    )
+
+                    # Build timestep schedule (same as generate_image)
+                    shift = self.timestep_shift
+                    ts = torch.linspace(1, 0, sf_steps + 1, device=x_t.device)
+                    ts = shift * ts / (1 + (shift - 1) * ts)
+                    dts = ts[:-1] - ts[1:]
+
+                    # Compute MoE routing indexes (needed for language_model call)
+                    sf_extra = {}
+                    if self.use_moe:
+                        sf_und_idx = packed_text_indexes
+                        if packed_vit_token_indexes is not None:
+                            sf_und_idx = torch.cat([packed_text_indexes, packed_vit_token_indexes], dim=0)
+                        sf_extra.update(
+                            packed_und_token_indexes=sf_und_idx,
+                            packed_gen_token_indexes=packed_vae_token_indexes,
+                        )
+
+                    # Build attention mask (may already exist from above)
+                    if nested_attention_masks is None:
+                        sf_sparse = create_sparse_mask(sample_lens, split_lens, attn_modes, x_t.device)
+                        sf_seqlen = sum(sample_lens)
+                        sf_attention_mask = create_block_mask(
+                            sf_sparse, B=1, H=self.num_heads, Q_LEN=sf_seqlen, KV_LEN=sf_seqlen,
+                            device=x_t.device, BLOCK_SIZE=128, _compile=True,
+                        )
+                    else:
+                        sf_attention_mask = nested_attention_masks
+
+                    for i, t_val in enumerate(ts[:-1]):
+                        # Timestep: t_val for output tokens, 0 for input tokens
+                        t_vec = torch.zeros(x_t.shape[0], device=x_t.device)
+                        t_vec[is_output] = t_val.item()
+
+                        # Embed VAE tokens at current timestep
+                        ts_embed = self.time_embedder(t_vec)
+                        pos_embed = self.latent_pos_embed(packed_latent_position_ids)
+                        vae_embed = self.vae2llm(x_t) + ts_embed + pos_embed
+
+                        # Build packed sequence with current VAE embeddings
+                        sf_seq = packed_sequence.clone()
+                        sf_seq[packed_vae_token_indexes] = vae_embed
+
+                        # Forward through language model
+                        hidden = self.language_model(
+                            packed_sequence=sf_seq,
+                            sample_lens=sample_lens,
+                            attention_mask=sf_attention_mask,
+                            packed_position_ids=packed_position_ids,
+                            **sf_extra,
+                        )
+
+                        # Extract velocity prediction at output image positions
+                        v_t = self.llm2vae(hidden[mse_loss_indexes])
+                        # Euler step: x_t -= v_t * dt (velocity points from data to noise)
+                        x_t[is_output] = x_t[is_output] - v_t * dts[i]
+
+                    # Blend predicted clean latent with GT (only output tokens)
+                    packed_latent_clean[is_output] = (
+                        sf_ratio * x_t[is_output] + (1 - sf_ratio) * packed_latent_clean[is_output]
+                    )
+            # --- End self-forcing block ---
 
             noise = torch.randn_like(packed_latent_clean)
             packed_timesteps = torch.sigmoid(packed_timesteps)
