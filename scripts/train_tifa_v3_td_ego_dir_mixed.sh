@@ -1,7 +1,7 @@
 #!/bin/bash
-# td_ego_dir Mixed VCoT+AO: 50% VCoT (sideview gen) + 50% AO (VCoT system prompt, no image gen)
+# td_ego_dir Mixed VCoT+AO: 50% VCoT (sideview gen) + 50% AO (answer-only system prompt)
 # 22,408 total samples (~11,204 VCoT + 11,204 AO), ~20 samples/step avg, ~1,120 steps/epoch
-# 6,000 steps ≈ 5 epochs
+# 10,000 steps ≈ 9 epochs
 
 resume_from=${resume_from:-"/gpfs/scrubbed/linjli/hf_cache/BAGEL-7B-MoT"}
 run_name=${run_name:-"mixed_vcot_ao_td_ego_dir_8gpu"}
@@ -34,7 +34,7 @@ torchrun \
   --mse_weight 1 \
   --ce_weight 1 \
   --ema 0.999 \
-  --total_steps 6000 \
+  --total_steps 10000 \
   --save_every 1000 \
   --wandb_project tifa_v3 \
   --wandb_name mixed_vcot_ao_td_ego_dir
