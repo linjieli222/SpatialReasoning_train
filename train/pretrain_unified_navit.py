@@ -337,6 +337,19 @@ class TrainingArguments:
         default=False,
         metadata={"help": "Enable FLEX (flash-ext friendly) packing algorithm for sequence data."}
     )
+    # --- self-forcing ---
+    self_force: bool = field(
+        default=False,
+        metadata={"help": "Enable self-forcing: denoise from model's own predictions, blend with GT."}
+    )
+    self_force_steps: int = field(
+        default=4,
+        metadata={"help": "Number of denoising steps for self-forcing latent prediction (Phase 1)."}
+    )
+    self_force_ratio: float = field(
+        default=0.5,
+        metadata={"help": "Blend ratio: 0.0 = pure teacher-forcing, 1.0 = pure self-forcing."}
+    )
 
 
 def main():
