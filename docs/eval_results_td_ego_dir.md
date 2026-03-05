@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 through s8k (nothink s2k cross-subset+RealPT, vcot s7k PT2PV2+RealPT, answeronly s2k RealPT). TextCoT think/nothink through s10k (s4k+s10k cross-subset added). MMCoT nothink through s7k. Mixed VCoT+AO through s6k (s4k-s5k RealPT nothink added). Baseline PT2PV2 available. Answeronly: VCoT s2k (incl. RealPT), Mixed s4k.
+> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 through s8k (nothink s2k cross-subset+RealPT, vcot s7k PT2PV2+RealPT, answeronly s2k RealPT). TextCoT think/nothink through s10k (s4k+s10k cross-subset added). MMCoT nothink through s7k (stopped). Mixed VCoT+AO through s6k (s4k-s5k RealPT nothink added). Mixed from VCoT (s7k, s2k) training started. Baseline PT2PV2 available. Answeronly: VCoT s2k (incl. RealPT), Mixed s4k.
 
 ## Figures
 
@@ -216,6 +216,26 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 
 ---
 
+## Mixed from VCoT td_ego_dir
+
+Same data mix as Mixed (50% VCoT + 50% AO with VCoT system prompt), but initialized from VCoT l32 checkpoints instead of base BAGEL-7B-MoT. Tests whether starting from a VCoT-pretrained model improves mixed training.
+
+### Mixed from VCoT s7k
+
+Base dir: `.../tifa_v3_td_ego_dir_mixed_from_vcot/mixed_from_vcot_s7k_td_ego_dir_8gpu/`
+Initialized from VCoT l32 s7k EMA. 5,000 steps. Training ongoing.
+
+*(Evals pending)*
+
+### Mixed from VCoT s2k
+
+Base dir: `.../tifa_v3_td_ego_dir_mixed_from_vcot/mixed_from_vcot_s2k_td_ego_dir_8gpu/`
+Initialized from VCoT l32 s2k EMA (best nothink checkpoint before collapse). 5,000 steps. Training started.
+
+*(Evals pending)*
+
+---
+
 ## TextCoT td_ego_dir
 
 Config: `bagel_mot` (text-only, think=True) | Base dir: `.../tifa_v3_td_ego_dir_text_cot/textcot_td_ego_dir_8gpu/`
@@ -254,7 +274,7 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 ## MMCoT td_ego_dir
 
 Config: `bagel_mot_vcot` (image generation, think=True) | Base dir: `.../tifa_v3_td_ego_dir_mmcot/mmcot_td_ego_dir_8gpu/`
-Training: Multimodal CoT with sideview generation + text reasoning. 10k steps, latent 32 (512x512 output).
+Training: Multimodal CoT with sideview generation + text reasoning. Latent 32 (512x512 output). Stopped at s7k (7,700 steps).
 
 ### No-think (`bagel_mot_nothink`) — EMA
 
@@ -265,7 +285,7 @@ Training: Multimodal CoT with sideview generation + text reasoning. 10k steps, l
 | SV (acc) | 52.0 | 60.1 | 66.2 | 68.7 | **70.2** | 67.2 | 66.7 |
 | SV (F1) | 20.2 | 43.2 | 55.0 | 59.2 | **63.4** | 59.6 | 58.8 |
 
-> MMCoT nothink improves steadily. PT2P peaks at **s6k (71.4%)**, approaching AO levels (80.9%). SV peaks at **s5k (70.2%/F1=63.4)**, then declines. PT2PV2 peaks at **s5k (62.8%)**. s7k continues decline on all metrics. Training ongoing.
+> MMCoT nothink improves steadily. PT2P peaks at **s6k (71.4%)**, approaching AO levels (80.9%). SV peaks at **s5k (70.2%/F1=63.4)**, then declines. PT2PV2 peaks at **s5k (62.8%)**. s7k continues decline on all metrics. Training stopped — past peak.
 
 ---
 
