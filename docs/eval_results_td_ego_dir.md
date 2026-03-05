@@ -97,11 +97,12 @@ GT sideview images injected as visual thoughts — measures reasoning ability in
 | Subset | Checkpoint | Accuracy | Samples |
 |--------|------------|----------|---------|
 | PT2P | s3k EMA | **90.9%** | 329 |
-| PT2PV2 | s7k EMA | **86.7%** | 113 (partial) |
+| PT2PV2 ego_dir | s7k EMA | **86.7%** | 113 (partial) |
+| PT2PV2 td_path | s7k EMA | 42.0% | 169 |
 | AO best (reference) | s6k EMA | 80.9% | 329 |
 | VCoT end-to-end (reference) | s3k EMA | 60.5% | 329 |
 
-> The ~30pp gap between prefill (90.9%) and end-to-end VCoT (60.5%) confirms **sideview generation quality is the bottleneck**. Prefill exceeds AO best (80.9%) by ~10pp, showing visual thoughts genuinely help when image quality is high.
+> The ~30pp gap between prefill (90.9%) and end-to-end VCoT (60.5%) confirms **sideview generation quality is the bottleneck**. Prefill exceeds AO best (80.9%) by ~10pp on PT2P, showing visual thoughts genuinely help when image quality is high. However, prefill on PT2PV2 td_path (42.0%) is dramatically lower than ego_dir (86.7%) — the model trained on ego_dir does not generalize sideview reasoning to td_path even with perfect GT images.
 
 ### Think text-only (`bagel_mot`)
 
@@ -223,8 +224,8 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 | PT2PV2 ego_dir (acc) | 53.1 | 65.5 | 69.0 | 69.0 | **70.8** | 69.9 |
 | PT2PV2 td_path (acc) | -- | -- | -- | 61.5 | 62.1 | **65.1** |
 | PT2PV2 td_path_arrow (acc) | -- | -- | -- | 60.8 | -- | 61.4 |
-| RealPT td_path (acc) | -- | -- | -- | 42.5 | -- | 42.5 |
-| RealPT td_path_arrow (acc) | -- | -- | -- | 62.0 | -- | -- |
+| RealPT td_path (acc) | -- | -- | -- | 42.5 | 41.4 | 42.5 |
+| RealPT td_path_arrow (acc) | -- | -- | -- | **62.0** | -- | 58.2 |
 
 ### VCoT image gen (`bagel_mot_vcot`) — EMA
 
@@ -236,9 +237,10 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 
 | Subset | s4000 | s5000 | s6000 |
 |--------|-------|-------|-------|
-| PT2PV2 ego_dir (acc) | 58.4 | -- | **69.9** |
+| PT2PV2 ego_dir (acc) | 58.4 | **69.9** | **69.9** |
 | PT2PV2 td_path (acc) | 59.8 | 62.1 | -- |
 | PT2PV2 td_path_arrow (acc) | **63.2** | -- | -- |
+| RealPT td_path (acc) | 42.5 | -- | -- |
 
 > **Key result: Mixed training prevents VCoT collapse.** Think PT2PV2 peaks at **s4k (70.8%)**, nothink ego_dir at **s6k (72.6%)** — no collapse unlike pure VCoT. Nothink td_path peaks at **s6k (65.1%)**, td_path_arrow at **s4k (63.2%)**. RealPT: td_path stable (~44-45%), td_path_arrow peaks at **s4k (68.4%)** then declines (same overfitting pattern). nothink_vcot (VAE input) ego_dir peaks at **s5k (70.8%)**, td_path at **s6k (65.1%)**; RealPT td_path flat at ~42.5%, td_path_arrow strong at s4k (62.0%). Answeronly ego_dir rises to **s6k (69.9%)**, matching nothink_vcot. VCoT image-gen improves to **s5k (54.9%)** after initial dip.
 
