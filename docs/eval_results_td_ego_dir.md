@@ -260,13 +260,13 @@ Config: `bagel_mot` (text-only, think=True) | Model: base BAGEL-7B-MoT (no fine-
 | Subset | Accuracy |
 |--------|----------|
 | PT2PV2 td_path | 26.0 |
+| PT2PV2 td_path_arrow | 27.5 |
 | PT2PV2 td_ego_dir | 36.3 |
-| PT2PV2 td_path_arrow | -- |
 | PT2P td_path SV | 42.5 |
 | RealPT td_path | 39.7 |
 | RealPT td_path_arrow | 45.6 |
 
-> PT2PV2 td_ego_dir (36.3%) significantly higher than td_path (26.0%) at baseline — ego_dir is an easier task format. PT2PV2 td_path_arrow and remaining RealPT evals pending.
+> PT2PV2 td_ego_dir (36.3%) significantly higher than td_path (26.0%) at baseline — ego_dir is an easier task format. td_path and td_path_arrow nearly identical (26.0% vs 27.5%). RealPT arrow (45.6%) easier than path (39.7%).
 
 ---
 
