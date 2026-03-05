@@ -19,7 +19,7 @@
 | s2k  | 64.60%  | 65.49%       | 61.06%         | 43.36%          |
 | s3k  | **70.80%** | 69.03%    | 69.03%         | 44.25%          |
 | s4k  | 69.03%  | 69.03%       | **70.80%**     | 52.21%          |
-| s5k  | **70.80%** | —         | 69.03%         | **54.87%**      |
+| s5k  | **70.80%** | **70.80%** | 69.03%         | **54.87%**      |
 
 ### td_path (n=169) — Nothink only
 
@@ -55,7 +55,7 @@
 | s6k  | 53.98%                   | 47.79%                  | 65.65%                    | 63.22%                   | 49.0%                | 45.0%               |
 | s7k  | —                        | —                       | 63.22%                    | 63.53%                   | **53.0%**            | 48.0%               |
 | s8k  | 53.98%                   | 50.44%                  | 65.65%                    | 65.35%                   | 53.0%                | 43.0%               |
-| s9k  | —                        | —                       | 65.05%                    | —                        | 55.0%                | —                   |
+| s9k  | —                        | —                       | 65.05%                    | 61.09%                   | **55.0%**            | 46.0%               |
 
 ## MMCoT (multi-modal chain-of-thought)
 
@@ -68,7 +68,7 @@
 | s3k  | 52.21%         | 65.96%          | 41.0%      |
 | s4k  | 59.29%         | 69.60%          | 45.0%      |
 | s5k  | **62.83%**     | 68.69%          | **51.0%**  |
-| s6k  | 59.29%         | **71.43%**      | —          |
+| s6k  | 59.29%         | **71.43%**      | 48.0%      |
 
 ## VCoT (pure VCoT training, mse_weight=1)
 
@@ -136,7 +136,7 @@
 ## Key Observations
 
 1. **Mixed training best**: 70.80% (nothink s3k/s5k) on td_ego_dir — close to AO ego_dir baseline (73.45%) while retaining image generation capability
-2. **Nothink_VCoT boost at s1k**: 53.10% vs 38.94% nothink (+14%) — VAE input encoding helps early in training, gap closes by s3k (69.03% vs 70.80%)
+2. **Nothink_VCoT converges to nothink**: early boost at s1k (53.10% vs 38.94%, +14%), gap closes by s3k, and both reach 70.80% at s5k — VAE input encoding helps early but doesn't matter long-term
 3. **Mixed imagegen improves later**: s4k (52.21%) and s5k (54.87%) are best, suggesting image gen quality improves with more training
 4. **MSE2 nothink collapses**: drops to 0.88% by s5k — high image loss weight destroys text reasoning
 5. **Pure VCoT nothink collapses at s7k**: 0.0% — extended VCoT training loses text-only ability
@@ -144,5 +144,5 @@
 7. **MMCoT steadily improves**: 33.63% → 62.83% nothink over s1k-s5k on PT2PV2, still below mixed (70.80%) but trending up
 8. **TextCoT AO/Think > Nothink**: AO (think=True) consistently beats nothink on PT2PV2 (57.52% vs 46.02% at s4k), showing text thinking helps
 9. **TextCoT peaks at s4k-s5k then declines**: PT2PV2 AO peaks at 57.52% (s4k) then drops to 53.98% (s8k); PT2P v1 at 67.78% (s5k); SV climbs to 55% at s9k
-10. **MMCoT s6k**: PT2PV2 drops to 59.29% (from 62.83% at s5k) but PT2P v1 reaches new peak 71.43% — model may be overfitting to v1 distribution
+10. **MMCoT s6k diverges**: PT2PV2 drops to 59.29% (from 62.83%), PT2P v1 peaks at 71.43%, SV drops to 48.0% (from 51.0%) — overfitting to v1 distribution while degrading on debiased/SV
 11. **Prefill v2 s7k ema**: 86.73% on PT2PV2 — upper bound when GT sideview is given
