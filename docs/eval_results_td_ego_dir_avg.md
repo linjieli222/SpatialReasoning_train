@@ -1,0 +1,252 @@
+# Evaluation Results — td_ego_dir (Averaged)
+
+Back to [Eval Results Index](eval_results.md) | [Full results (per-subset)](eval_results_td_ego_dir.md)
+
+> Synthetic avg = (PT2PV2 ego_dir + td_path + td_path_arrow) / 3. Real avg = (RealPT td_path + td_path_arrow) / 2. Averages only shown where all component values are available.
+
+---
+
+## AO td_ego_dir
+
+Training: 5 epochs, answer-only. 10k steps completed.
+
+#### EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| PT2P (acc) | 53.8 | 77.5 | 79.0 | 79.0 | 79.3 | **80.9** | 79.6 | 79.9 | 79.0 | 79.6 |
+| Synthetic avg | -- | -- | -- | -- | -- | **65.7** | -- | -- | -- | -- |
+| Real avg | 46.6 | **61.8** | 58.1 | 56.1 | 56.4 | 54.7 | 51.5 | 49.7 | -- | -- |
+
+#### noEMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| PT2P (acc) | 76.3 | 79.0 | 78.1 | 77.5 | 76.9 | 78.1 | 78.4 | 75.1 | 79.3 | **80.2** |
+| Real avg | **56.9** | 56.0 | 51.9 | 50.1 | 53.5 | 48.9 | 50.9 | 46.1 | -- | -- |
+
+> PT2P peaks at **s6k EMA (80.9%)**. Synthetic avg only available at s6k (**65.7%**). Real avg peaks at **s2k EMA (61.8%)** then declines — overfits to AI2Thor.
+
+---
+
+## VCoT l32 td_ego_dir
+
+Training: VCoT with 512x512 output images. 8k steps completed.
+
+### VCoT image gen (`bagel_mot_vcot`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 51.4 | 52.0 | 60.5 | 61.4 | 58.1 | 58.4 | **64.4** | 61.7 |
+| Synthetic avg | -- | -- | -- | -- | -- | -- | **40.6** | -- |
+| Real avg | -- | -- | -- | **35.6** | -- | -- | 26.3 | -- |
+
+> VCoT image gen: Synthetic avg only at s7k (**40.6%**) — ego_dir (50.4%) much stronger than td_path/arrow (35.7%). Real avg declines from s4k to s7k.
+
+### VCoT prefill (`bagel_mot_vcot_prefill`) — s7k EMA
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2P | **90.9%** (s3k) |
+| Synthetic avg | **55.6%** |
+| PT2PV2 ego_dir | 86.7% |
+| PT2PV2 td_path | 42.0% |
+| PT2PV2 td_path_arrow | 38.0% |
+
+> Prefill synthetic avg (**55.6%**) dragged down by poor td_path generalization. ego_dir (86.7%) vs td_path (42.0%) gap confirms model doesn't generalize sideview reasoning across task formats.
+
+### No-think (`bagel_mot_nothink`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 56.5 | **74.5** | 34.7 | -- | -- | -- | 0.0 | -- |
+| PT2PV2 ego_dir (acc) | 43.4 | **61.1** | 25.7 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| Synthetic avg | -- | **49.0** | -- | -- | -- | -- | -- | -- |
+| Real avg | **55.6** | **57.5** | -- | 5.4 | -- | -- | -- | -- |
+
+#### noEMA
+
+| Subset | s1000 | s2000 | s3000 |
+|--------|-------|-------|-------|
+| PT2P (acc) | **72.0** | 71.7 | 0.0 |
+| Real avg | **57.8** | 53.1 | 0.0 |
+
+> **Rise-then-collapse**: Peaks at s2k (synthetic avg **49.0%**, real avg **57.5%**), collapses by s3k.
+
+### Answeronly (`bagel_mot_answeronly`) — s2k EMA
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2PV2 ego_dir | 15.9 (invalid) |
+| PT2PV2 td_path | 44.4 |
+| PT2PV2 td_path_arrow | 46.8 |
+| Real avg | **62.3** |
+
+> ego_dir invalid (truncated predictions). Real avg strong at **62.3%**.
+
+---
+
+## Mixed VCoT+AO td_ego_dir
+
+Training: 50% VCoT + 50% AO with VCoT system prompt. 10k steps, complete.
+
+### Think (`bagel_mot`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 45.1 | 61.1 | 69.0 | **70.8** | 69.0 |
+
+### No-think (`bagel_mot_nothink`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 38.9 | 64.6 | 70.8 | 69.0 | 70.8 | 72.6 | **73.5** | 72.6 |
+| Synthetic avg | 34.9 | 55.1 | 63.8 | 64.8 | 65.2 | 66.4 | 65.3 | **67.5** |
+| Real avg | -- | -- | -- | **56.1** | 53.8 | 52.5 | 51.0 | 52.5 |
+
+### No-think with VAE (`bagel_mot_nothink_vcot`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 53.1 | 65.5 | 69.0 | 69.0 | 70.8 | 69.9 | **71.7** | **71.7** |
+| Synthetic avg | -- | -- | -- | 63.8 | -- | **65.5** | **66.5** | **66.7** |
+| Real avg | -- | -- | -- | 52.3 | **52.4** | 50.4 | -- | 48.6 |
+
+### VCoT image gen (`bagel_mot_vcot`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 50.4 | 43.4 | 44.2 | 52.2 | **54.9** |
+
+### Answeronly (`bagel_mot_answeronly`) — EMA
+
+| Subset | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 58.4 | 69.9 | 69.9 | **70.8** | **70.8** |
+| Synthetic avg | 60.5 | 63.7 | **65.7** | 65.2 | -- |
+| Real avg | **54.2** | 53.4 | 52.2 | 52.8 | -- |
+
+> **Mixed prevents collapse.** Nothink synthetic avg peaks at **s8k (67.5%)**, real avg at **s4k (56.1%)**. Answeronly synthetic avg peaks at **s6k (65.7%)**. nothink_vcot synthetic avg steady at **66.5-66.7%** (s7k-s8k).
+
+---
+
+## Mixed from VCoT td_ego_dir
+
+### Mixed from VCoT s7k (MFV7k)
+
+Initialized from VCoT l32 s7k EMA (collapsed). 5k steps, complete.
+
+#### No-think (`bagel_mot_nothink`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 19.5 | **72.6** | 71.7 | 70.8 | 71.7 |
+| Synthetic avg | 22.6 | **65.8** | **65.9** | 64.0 | 65.6 |
+| Real avg | 20.5 | **48.5** | 47.9 | 47.3 | 46.6 |
+
+#### Answeronly (`bagel_mot_answeronly`) — s5k EMA
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2PV2 td_path | 62.1 |
+| PT2PV2 td_path_arrow | 64.3 |
+| Real avg | **45.6** |
+
+> MFV7k nothink: recovers from collapse by s2k. Synthetic avg stable at **~65-66%** (s2k-s5k). Real avg peaks at **s2k (48.5%)**.
+
+### Mixed from VCoT s2k (MFV2k)
+
+Initialized from VCoT l32 s2k EMA (pre-collapse). 5k steps, training ongoing.
+
+#### No-think (`bagel_mot_nothink`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 |
+|--------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 63.7 | 67.3 | 71.7 | **73.5** |
+| Synthetic avg | 53.2 | 60.9 | **64.5** | **64.7** |
+| Real avg | **61.0** | **62.1** | 61.1 | 58.6 |
+
+#### Answeronly (`bagel_mot_answeronly`) — s3k EMA
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2PV2 td_path | 57.4 |
+| PT2PV2 td_path_arrow | 63.2 |
+| Real avg | **56.1** |
+
+> MFV2k nothink: stronger start than MFV7k. Synthetic avg peaks at **s4k (64.7%)**. Real avg peaks at **s2k (62.1%)** — highest real avg across all models. Real avg declines with training (overfitting).
+
+---
+
+## TextCoT td_ego_dir
+
+Training: text chain-of-thought. 10k steps completed.
+
+### Think (`bagel_mot`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 | 63.2 | 65.7 | 65.0 | 62.9 |
+| PT2PV2 ego_dir (acc) | 38.1 | 45.1 | 53.1 | **57.5** | 53.1 | 54.0 | 51.3 | 54.0 | 56.6 | 49.6 |
+| Synthetic avg | -- | -- | -- | **50.2** | 49.7 | -- | -- | -- | -- | 46.6 |
+| Real avg | -- | -- | -- | **58.3** | 51.8 | -- | -- | -- | -- | 45.6 |
+
+### No-think (`bagel_mot_nothink`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| PT2P (acc) | 47.7 | 56.5 | 59.9 | 63.5 | 64.7 | 63.2 | 63.5 | 65.3 | -- | **66.0** |
+| PT2PV2 ego_dir (acc) | 38.9 | 41.6 | 47.8 | 46.0 | 55.8 | 47.8 | **58.4** | 50.4 | 54.0 | 54.0 |
+| Synthetic avg | -- | -- | -- | -- | **49.4** | -- | **51.2** | -- | -- | -- |
+| Real avg | -- | -- | -- | -- | **52.2** | -- | 46.4 | -- | -- | -- |
+
+> TextCoT think: synthetic avg peaks at **s4k (50.2%)**, real avg at **s4k (58.3%)**. Nothink: synthetic avg peaks at **s7k (51.2%)**, real avg at **s5k (52.2%)**.
+
+---
+
+## MMCoT td_ego_dir
+
+Training: multimodal CoT with sideview + text reasoning. Stopped at s7k.
+
+### No-think (`bagel_mot_nothink`) — EMA
+
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 48.0 | 63.2 | 66.0 | 69.6 | 68.7 | **71.4** | 69.6 |
+| PT2PV2 ego_dir (acc) | 33.6 | 39.8 | 52.2 | 59.3 | **62.8** | 59.3 | 59.3 |
+| Synthetic avg | -- | -- | -- | -- | **44.7** | -- | -- |
+| Real avg | -- | -- | -- | -- | **51.0** | -- | -- |
+
+> MMCoT nothink: PT2P peaks at **s6k (71.4%)**. Synthetic avg at s5k only (**44.7%**) — td_path/arrow much weaker than ego_dir.
+
+---
+
+## Baseline (BAGEL-7B-MoT)
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2PV2 ego_dir | 36.3 |
+| PT2PV2 td_path | 26.0 |
+| PT2PV2 td_path_arrow | 27.5 |
+| Synthetic avg | **29.9** |
+| Real avg | **42.7** |
+
+---
+
+## Cross-Model Comparison (best checkpoints)
+
+| Model | Best Synthetic Avg | Best Real Avg | Best PT2P |
+|-------|-------------------|---------------|-----------|
+| Baseline | 29.9 | 42.7 | -- |
+| AO | 65.7 (s6k) | 61.8 (s2k) | 80.9 (s6k) |
+| VCoT nothink | 49.0 (s2k) | 57.5 (s2k) | 74.5 (s2k) |
+| VCoT prefill | 55.6 (s7k) | -- | 90.9 (s3k) |
+| VCoT image gen | 40.6 (s7k) | 35.6 (s4k) | 64.4 (s7k) |
+| Mixed nothink | **67.5** (s8k) | 56.1 (s4k) | -- |
+| Mixed nothink_vcot | 66.7 (s8k) | 52.4 (s5k) | -- |
+| Mixed answeronly | 65.7 (s6k) | 54.2 (s4k) | -- |
+| MFV7k nothink | 65.9 (s3k) | 48.5 (s2k) | -- |
+| MFV2k nothink | 64.7 (s4k) | **62.1** (s2k) | -- |
+| TextCoT think | 50.2 (s4k) | 58.3 (s4k) | 67.8 (s5k) |
+| TextCoT nothink | 51.2 (s7k) | 52.2 (s5k) | 66.0 (s10k) |
+| MMCoT nothink | 44.7 (s5k) | 51.0 (s5k) | 71.4 (s6k) |
