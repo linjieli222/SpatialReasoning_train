@@ -56,6 +56,7 @@
 | s7k  | —                        | —                       | 63.22%                    | 63.53%                   | **53.0%**            | 48.0%               |
 | s8k  | 53.98%                   | 50.44%                  | 65.65%                    | 65.35%                   | 53.0%                | 43.0%               |
 | s9k  | —                        | —                       | 65.05%                    | 61.09%                   | **55.0%**            | 46.0%               |
+| s10k | —                        | —                       | 62.92%                    | —                        | —                    | —                   |
 
 ## MMCoT (multi-modal chain-of-thought)
 
@@ -74,16 +75,16 @@
 
 ### td_ego_dir
 
-| Step | Nothink (n=113) | Imagegen PT2P v1 (n=329) |
-|------|-----------------|--------------------------|
-| s1k  | —               | 51.37%                   |
-| s2k  | 61.06%          | 51.98%                   |
-| s3k  | —               | 60.49%                   |
-| s4k  | —               | 61.40%                   |
-| s5k  | —               | 58.05%                   |
-| s6k  | —               | 58.36%                   |
-| s7k  | 0.0%            | **64.44%**               |
-| s8k  | —               | 61.70%                   |
+| Step | Nothink PT2PV2 (n=113) | Imagegen PT2PV2 (n=113) | Imagegen PT2P v1 (n=329) | Imagegen SV (n=100) |
+|------|------------------------|-------------------------|--------------------------|---------------------|
+| s1k  | —                      | —                       | 51.37%                   | —                   |
+| s2k  | 61.06%                 | —                       | 51.98%                   | —                   |
+| s3k  | —                      | —                       | 60.49%                   | —                   |
+| s4k  | —                      | —                       | 61.40%                   | —                   |
+| s5k  | —                      | —                       | 58.05%                   | —                   |
+| s6k  | —                      | —                       | 58.36%                   | —                   |
+| s7k  | 0.0%                   | 50.44%                  | **64.44%**               | 77.0%               |
+| s8k  | —                      | —                       | 61.70%                   | —                   |
 
 ## MSE5 (mse_weight=5)
 
@@ -139,7 +140,7 @@
 2. **Nothink_VCoT converges to nothink**: early boost at s1k (53.10% vs 38.94%, +14%), gap closes by s3k, and both reach 70.80% at s5k — VAE input encoding helps early but doesn't matter long-term
 3. **Mixed imagegen improves later**: s4k (52.21%) and s5k (54.87%) are best, suggesting image gen quality improves with more training
 4. **MSE2 nothink collapses**: drops to 0.88% by s5k — high image loss weight destroys text reasoning
-5. **Pure VCoT nothink collapses at s7k**: 0.0% — extended VCoT training loses text-only ability
+5. **Pure VCoT nothink collapses at s7k**: 0.0% — extended VCoT training loses text-only ability; imagegen drops from 64.44% (PT2P v1) to 50.44% (PT2PV2) showing bias dependence
 6. **Mixed prevents collapse**: maintains ~70% nothink through s3k-s5k while imagegen stays ~44-55%
 7. **MMCoT steadily improves**: 33.63% → 62.83% nothink over s1k-s5k on PT2PV2, still below mixed (70.80%) but trending up
 8. **TextCoT AO/Think > Nothink**: AO (think=True) consistently beats nothink on PT2PV2 (57.52% vs 46.02% at s4k), showing text thinking helps
