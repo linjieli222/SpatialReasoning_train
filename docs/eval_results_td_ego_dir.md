@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 complete through s8k. TextCoT think through s9k, nothink through s8k. MMCoT nothink through s6k. Mixed VCoT+AO through s5k. Baseline PT2PV2 available. First answeronly result (VCoT s2k).
+> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 complete through s8k. TextCoT think through s9k, nothink through s9k. MMCoT nothink through s6k. Mixed VCoT+AO through s5k. Baseline PT2PV2 available. First answeronly result (VCoT s2k).
 
 ## Figures
 
@@ -220,20 +220,22 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). Tr
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 | 63.2 | 65.7 | 65.0 |
-| PT2PV2 (acc) | 38.1 | 45.1 | 53.1 | **57.5** | 53.1 | 54.0 | -- | 54.0 | -- |
+| PT2PV2 ego_dir (acc) | 38.1 | 45.1 | 53.1 | **57.5** | 53.1 | 54.0 | -- | 54.0 | -- |
+| PT2PV2 td_path (acc) | -- | -- | -- | -- | 47.9 | -- | -- | -- | -- |
 | SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | 64.6 | 63.1 | **64.6** | 62.1 | 61.1 |
 | SV (F1) | 21.5 | 41.1 | 48.1 | 54.3 | 58.8 | 57.3 | **60.2** | 58.6 | 59.1 |
+| RealPT td_path (acc) | -- | -- | -- | -- | 52.3 | -- | -- | -- | -- |
 
 ### No-think (`bagel_mot_nothink`) — EMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
-|--------|-------|-------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 47.7 | 56.5 | 59.9 | 63.5 | **64.7** | 63.2 | 63.5 | 65.3 |
-| PT2PV2 (acc) | 38.9 | 41.6 | 47.8 | 46.0 | **55.8** | 47.8 | -- | 50.4 |
-| SV (acc) | 51.5 | 55.1 | 64.1 | 63.6 | 63.6 | **64.1** | **64.1** | 61.6 |
-| SV (F1) | 20.0 | 38.6 | 53.0 | 53.8 | 52.0 | 55.9 | **57.5** | 53.1 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 47.7 | 56.5 | 59.9 | 63.5 | **64.7** | 63.2 | 63.5 | 65.3 | -- |
+| PT2PV2 (acc) | 38.9 | 41.6 | 47.8 | 46.0 | **55.8** | 47.8 | -- | 50.4 | -- |
+| SV (acc) | 51.5 | 55.1 | 64.1 | 63.6 | 63.6 | **64.1** | **64.1** | 61.6 | 62.6 |
+| SV (F1) | 20.0 | 38.6 | 53.0 | 53.8 | 52.0 | 55.9 | **57.5** | 53.1 | 55.8 |
 
-> PT2P peaks at **s5k (67.8% think)** then dips at s6k-s7k, recovers to 65.7% at s8k-s9k. PT2PV2 peaks at **s4k (57.5% think)**. SV peaks at **s7k (64.6%/F1=60.2 think)**. Nothink PT2P steadily improves to **s5k (64.7%)**, plateaus, then recovers at s8k (65.3%). s9k nothink PT2P dips to 61.1%.
+> PT2P peaks at **s5k (67.8% think)** then dips at s6k-s7k, recovers to 65.7% at s8k-s9k. PT2PV2 peaks at **s4k (57.5% think)**. SV peaks at **s7k (64.6%/F1=60.2 think)**. Nothink PT2P steadily improves to **s5k (64.7%)**, plateaus, then recovers at s8k (65.3%). Nothink SV peaks at **s6k-s7k (64.1%/F1=57.5)**, dips at s8k, partial recovery at s9k (62.6%).
 
 ---
 
