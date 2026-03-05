@@ -53,15 +53,15 @@ Training: VCoT with 512x512 output images (latent 32). 8k steps completed.
 
 | Setting | Config | think | understanding_output | vae_input | Image Gen | System Prompt |
 |---------|--------|-------|---------------------|-----------|-----------|---------------|
-| VCoT (image gen) | `bagel_mot_vcot` | True | False | False (default) | Yes (512x512) | VCoT think |
-| VCoT prefill | `bagel_mot_vcot_prefill` | True | False | False | Prefilled GT | VCoT think |
+| VCoT (image gen) | `bagel_mot_vcot` | True | False | False (default) | Yes | VCoT think |
+| VCoT prefill | `bagel_mot_vcot_prefill` | True | False | False | Yes (prefilled GT) | VCoT think |
 | Think (text-only) | `bagel_mot` | True | True | False | No | VCoT think |
 | No-think | `bagel_mot_nothink` | False | True | False | No | Answer-only |
-| No-think with VAE | `bagel_mot_nothink_vcot` | False | False | False (default) | No (rarely triggers) | Answer-only |
+| No-think with VAE | `bagel_mot_nothink_vcot` | False | False | False (default) | Yes | Answer-only |
 | Answeronly | `bagel_mot_answeronly` | False | True | True | No | Answer-only |
 
 - **`understanding_output=True`**: Text-only generation. Input images encoded via ViT only (no VAE). No image generation loop.
-- **`understanding_output=False`**: Enables image generation loop. Input images encoded via both VAE and ViT. Model can generate images when it outputs `<image_start>`.
+- **`understanding_output=False`**: Enables image generation loop. Input images encoded via both VAE and ViT. If model outputs `<image_start>`, an image will be generated.
 - **`vae_input=True`**: Forces VAE input encoding even with `understanding_output=True`. Fixes train-eval mismatch for models trained with `visual_gen=True`.
 - **`think=True`**: Uses VCoT system prompt ("think step by step... visual thinking..."). Model may produce `<think>`, `<image_start>`, `<answer>` tags.
 - **`think=False`**: Uses answer-only system prompt ("Answer the question"). Model outputs `<answer>` directly.
