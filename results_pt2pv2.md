@@ -56,19 +56,21 @@
 | s7k  | —                        | —                       | 63.22%                    | 63.53%                   | **53.0%**            | 48.0%               |
 | s8k  | 53.98%                   | 50.44%                  | 65.65%                    | 65.35%                   | 53.0%                | 43.0%               |
 | s9k  | —                        | —                       | 65.05%                    | 61.09%                   | **55.0%**            | 46.0%               |
-| s10k | —                        | —                       | 62.92%                    | —                        | 64.0%                | —                   |
+| s10k | —                        | —                       | 62.92%                    | 65.96%                   | 64.0%                | —                   |
 
-### td_path (PT2PV2, n=169)
+### td_path — s5k
 
-| Step | AO/Think | Nothink |
-|------|----------|---------|
-| s5k  | 47.93%   | 42.60%  |
+| Subset | AO/Think | Nothink |
+|--------|----------|---------|
+| PT2PV2 (n=169) | 47.93% | 42.60% |
+| RealPT (n=174) | 52.30% | 50.57% |
 
-### td_path_arrow (PT2PV2, n=171)
+### td_path_arrow — s5k
 
-| Step | AO/Think | Nothink |
-|------|----------|---------|
-| s5k  | 47.95%   | 49.71%  |
+| Subset | AO/Think | Nothink |
+|--------|----------|---------|
+| PT2PV2 (n=171) | 47.95% | 49.71% |
+| RealPT (n=158) | 51.27% | — |
 
 ## MMCoT (multi-modal chain-of-thought)
 
@@ -97,6 +99,16 @@
 | s6k  | —                      | —                       | 58.36%                   | —                   |
 | s7k  | 0.0%                   | 50.44%                  | **64.44%**               | 77.0%               |
 | s8k  | —                      | —                       | 61.70%                   | —                   |
+
+### Answeronly eval (bagel_mot_answeronly) — PT2PV2
+
+Note: `bagel_mot_answeronly` = think=False, understanding_output=True, vae_input=True, extra_instruction="Do not think or generate any images."
+
+| Step | td_ego_dir (n=113) | td_path (n=169) | td_path_arrow (n=171) |
+|------|--------------------|-----------------|----------------------|
+| s2k  | 15.93%             | 44.38%          | 46.78%               |
+
+s2k td_ego_dir is very low (15.93%) because the model ignores the answer-only prompt and generates `<think>` tags + `<image_start>` tokens, rarely producing an `<answer>` tag.
 
 ## MSE5 (mse_weight=5)
 
