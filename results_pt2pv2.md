@@ -17,7 +17,7 @@
 |------|---------|--------------|----------------|-----------------|
 | s1k  | 38.94%  | 53.10%       | 45.13%         | 50.44%          |
 | s2k  | 64.60%  | 65.49%       | 61.06%         | 43.36%          |
-| s3k  | **70.80%** | —         | 69.03%         | 44.25%          |
+| s3k  | **70.80%** | 69.03%    | 69.03%         | 44.25%          |
 | s4k  | 69.03%  | —            | **70.80%**     | 52.21%          |
 | s5k  | **70.80%** | —         | 69.03%         | **54.87%**      |
 
@@ -41,21 +41,6 @@
 | s4k  | **63.16%** |
 | s5k  | 61.40%   |
 
-## VCoT (pure VCoT training, mse_weight=1)
-
-### td_ego_dir
-
-| Step | Nothink (n=113) | Imagegen PT2P v1 (n=329) |
-|------|-----------------|--------------------------|
-| s1k  | —               | 51.37%                   |
-| s2k  | 61.06%          | 51.98%                   |
-| s3k  | —               | 60.49%                   |
-| s4k  | —               | 61.40%                   |
-| s5k  | —               | 58.05%                   |
-| s6k  | —               | 58.36%                   |
-| s7k  | 0.0%            | **64.44%**               |
-| s8k  | —               | 61.70%                   |
-
 ## TextCoT (text chain-of-thought)
 
 ### td_ego_dir
@@ -66,7 +51,7 @@
 | s2k  | 45.13%                   | 41.59%                  | 59.57%                    | 56.53%                   | 30.0%                | 28.0%               |
 | s3k  | 53.10%                   | 47.79%                  | 61.09%                    | 59.88%                   | 38.0%                | 40.0%               |
 | s4k  | **57.52%**               | 46.02%                  | 64.44%                    | 63.53%                   | 44.0%                | 42.0%               |
-| s5k  | 53.10%                   | **55.75%**              | **67.78%**                | —                        | **50.0%**            | —                   |
+| s5k  | 53.10%                   | 55.75%                  | **67.78%**                | —                        | 50.0%                | —                   |
 | s6k  | 53.98%                   | 47.79%                  | 65.65%                    | 63.22%                   | 49.0%                | 45.0%               |
 | s7k  | —                        | —                       | 63.22%                    | 63.53%                   | **53.0%**            | 48.0%               |
 
@@ -81,6 +66,21 @@
 | s3k  | 52.21%         | 65.96%          | 41.0%      |
 | s4k  | 59.29%         | 69.60%          | 45.0%      |
 | s5k  | **62.83%**     | **68.69%**      | **51.0%**  |
+
+## VCoT (pure VCoT training, mse_weight=1)
+
+### td_ego_dir
+
+| Step | Nothink (n=113) | Imagegen PT2P v1 (n=329) |
+|------|-----------------|--------------------------|
+| s1k  | —               | 51.37%                   |
+| s2k  | 61.06%          | 51.98%                   |
+| s3k  | —               | 60.49%                   |
+| s4k  | —               | 61.40%                   |
+| s5k  | —               | 58.05%                   |
+| s6k  | —               | 58.36%                   |
+| s7k  | 0.0%            | **64.44%**               |
+| s8k  | —               | 61.70%                   |
 
 ## MSE5 (mse_weight=5)
 
@@ -133,7 +133,7 @@
 ## Key Observations
 
 1. **Mixed training best**: 70.80% (nothink s3k/s5k) on td_ego_dir — close to AO ego_dir baseline (73.45%) while retaining image generation capability
-2. **Nothink_VCoT boost at s1k**: 53.10% vs 38.94% nothink (+14%) — VAE input encoding helps early in training, gap narrows by s2k
+2. **Nothink_VCoT boost at s1k**: 53.10% vs 38.94% nothink (+14%) — VAE input encoding helps early in training, gap closes by s3k (69.03% vs 70.80%)
 3. **Mixed imagegen improves later**: s4k (52.21%) and s5k (54.87%) are best, suggesting image gen quality improves with more training
 4. **MSE2 nothink collapses**: drops to 0.88% by s5k — high image loss weight destroys text reasoning
 5. **Pure VCoT nothink collapses at s7k**: 0.0% — extended VCoT training loses text-only ability
