@@ -219,13 +219,13 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 
 ### No-think with VAE input (`bagel_mot_nothink_vcot`) — EMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
-|--------|-------|-------|-------|-------|-------|-------|
-| PT2PV2 ego_dir (acc) | 53.1 | 65.5 | 69.0 | 69.0 | **70.8** | 69.9 |
-| PT2PV2 td_path (acc) | -- | -- | -- | 61.5 | 62.1 | **65.1** |
-| PT2PV2 td_path_arrow (acc) | -- | -- | -- | 60.8 | -- | 61.4 |
-| RealPT td_path (acc) | -- | -- | -- | 42.5 | 41.4 | 42.5 |
-| RealPT td_path_arrow (acc) | -- | -- | -- | **62.0** | 63.3 | 58.2 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 53.1 | 65.5 | 69.0 | 69.0 | 70.8 | 69.9 | **71.7** |
+| PT2PV2 td_path (acc) | -- | -- | -- | 61.5 | 62.1 | **65.1** | -- |
+| PT2PV2 td_path_arrow (acc) | -- | -- | -- | 60.8 | -- | 61.4 | -- |
+| RealPT td_path (acc) | -- | -- | -- | 42.5 | 41.4 | 42.5 | -- |
+| RealPT td_path_arrow (acc) | -- | -- | -- | **62.0** | 63.3 | 58.2 | -- |
 
 ### VCoT image gen (`bagel_mot_vcot`) — EMA
 
