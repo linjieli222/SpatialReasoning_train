@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 complete through s8k. TextCoT think through s9k, nothink through s9k. MMCoT nothink through s6k. Mixed VCoT+AO through s5k. Baseline PT2PV2 available. First answeronly result (VCoT s2k).
+> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 complete through s8k (vcot s7k PT2PV2 added). TextCoT think/nothink through s10k (s5k cross-subset results added). MMCoT nothink through s6k. Mixed VCoT+AO through s5k. Baseline PT2PV2 available. Answeronly results: VCoT s2k (td_path, td_path_arrow).
 
 ## Figures
 
@@ -75,6 +75,7 @@ Training: VCoT with 512x512 output images (latent 32). 8k steps completed.
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | 51.4 | 52.0 | 60.5 | 61.4 | 58.1 | 58.4 | **64.4** | 61.7 |
+| PT2PV2 ego_dir (acc) | -- | -- | -- | -- | -- | -- | 50.4 | -- |
 | SV (acc) | 55.6 | 60.6 | 57.1 | 57.1 | 59.1 | **60.1** | **60.1** | 58.1 |
 | SV (F1) | 52.8 | 60.5 | 55.5 | 56.1 | 58.3 | **59.5** | 58.8 | 56.9 |
 | RealPT path (acc) | -- | -- | -- | 34.5 | -- | -- | -- | -- |
@@ -213,29 +214,35 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 ## TextCoT td_ego_dir
 
 Config: `bagel_mot` (text-only, think=True) | Base dir: `.../tifa_v3_td_ego_dir_text_cot/textcot_td_ego_dir_8gpu/`
-Training: TextCoT with text chain-of-thought reasoning (no image generation). Training ongoing.
+Training: TextCoT with text chain-of-thought reasoning (no image generation). 10k steps completed.
 
 ### Think (`bagel_mot`) — EMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 |
-|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 | 63.2 | 65.7 | 65.0 |
-| PT2PV2 ego_dir (acc) | 38.1 | 45.1 | 53.1 | **57.5** | 53.1 | 54.0 | -- | 54.0 | -- |
-| PT2PV2 td_path (acc) | -- | -- | -- | -- | 47.9 | -- | -- | -- | -- |
-| SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | 64.6 | 63.1 | **64.6** | 62.1 | 61.1 |
-| SV (F1) | 21.5 | 41.1 | 48.1 | 54.3 | 58.8 | 57.3 | **60.2** | 58.6 | 59.1 |
-| RealPT td_path (acc) | -- | -- | -- | -- | 52.3 | -- | -- | -- | -- |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 | 63.2 | 65.7 | 65.0 | 62.9 |
+| PT2PV2 ego_dir (acc) | 38.1 | 45.1 | 53.1 | **57.5** | 53.1 | 54.0 | -- | 54.0 | -- | -- |
+| PT2PV2 td_path (acc) | -- | -- | -- | -- | 47.9 | -- | -- | -- | -- | -- |
+| PT2PV2 td_path_arrow (acc) | -- | -- | -- | -- | 48.0 | -- | -- | -- | -- | -- |
+| SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | **64.6** | 63.1 | **64.6** | 62.1 | 61.1 | 60.1 |
+| SV (F1) | 21.5 | 41.1 | 48.1 | 54.3 | 58.8 | 57.3 | **60.2** | 58.6 | 59.1 | 61.8 |
+| RealPT td_path (acc) | -- | -- | -- | -- | 52.3 | -- | -- | -- | -- | -- |
+| RealPT td_path_arrow (acc) | -- | -- | -- | -- | 51.3 | -- | -- | -- | -- | -- |
 
 ### No-think (`bagel_mot_nothink`) — EMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 |
-|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 47.7 | 56.5 | 59.9 | 63.5 | **64.7** | 63.2 | 63.5 | 65.3 | -- |
-| PT2PV2 (acc) | 38.9 | 41.6 | 47.8 | 46.0 | **55.8** | 47.8 | -- | 50.4 | -- |
-| SV (acc) | 51.5 | 55.1 | 64.1 | 63.6 | 63.6 | **64.1** | **64.1** | 61.6 | 62.6 |
-| SV (F1) | 20.0 | 38.6 | 53.0 | 53.8 | 52.0 | 55.9 | **57.5** | 53.1 | 55.8 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
+| PT2P (acc) | 47.7 | 56.5 | 59.9 | 63.5 | 64.7 | 63.2 | 63.5 | 65.3 | -- | **66.0** |
+| PT2PV2 ego_dir (acc) | 38.9 | 41.6 | 47.8 | 46.0 | **55.8** | 47.8 | -- | 50.4 | -- | -- |
+| PT2PV2 td_path (acc) | -- | -- | -- | -- | 42.6 | -- | -- | -- | -- | -- |
+| PT2PV2 td_path_arrow (acc) | -- | -- | -- | -- | 49.7 | -- | -- | -- | -- | -- |
+| SV (acc) | 51.5 | 55.1 | 64.1 | 63.6 | 63.6 | **64.1** | **64.1** | 61.6 | 62.6 | -- |
+| SV (F1) | 20.0 | 38.6 | 53.0 | 53.8 | 52.0 | 55.9 | **57.5** | 53.1 | 55.8 | -- |
+| RealPT td_path (acc) | -- | -- | -- | -- | 50.6 | -- | -- | -- | -- | -- |
+| RealPT td_path_arrow (acc) | -- | -- | -- | -- | 53.8 | -- | -- | -- | -- | -- |
 
-> PT2P peaks at **s5k (67.8% think)** then dips at s6k-s7k, recovers to 65.7% at s8k-s9k. PT2PV2 peaks at **s4k (57.5% think)**. SV peaks at **s7k (64.6%/F1=60.2 think)**. Nothink PT2P steadily improves to **s5k (64.7%)**, plateaus, then recovers at s8k (65.3%). Nothink SV peaks at **s6k-s7k (64.1%/F1=57.5)**, dips at s8k, partial recovery at s9k (62.6%).
+> PT2P peaks at **s5k (67.8% think)**, then declines through s10k (62.9%). Nothink PT2P keeps improving to **s10k (66.0%)**. PT2PV2 peaks at **s4k (57.5% think)**. SV peaks at **s5k-s7k (~64.6% think)**. Nothink generalizes to td_path (42.6%), td_path_arrow (49.7%), RealPT path (50.6%), RealPT arrow (53.8%) at s5k.
 
 ---
 
@@ -285,6 +292,8 @@ Config: `understanding_output=True, vae_input=True, think=False` — text-only g
 | Subset | Accuracy |
 |--------|----------|
 | PT2PV2 td_path | 44.4 |
+| PT2PV2 td_path_arrow | 46.8 |
+| PT2PV2 td_ego_dir | 15.9 (invalid) |
 
-> First answeronly result. Remaining subsets (td_path_arrow, td_ego_dir, RealPT) and Mixed s4k results pending.
+> PT2PV2 td_ego_dir result is **invalid** — 79/113 predictions truncated at `<image_start>` because `understanding_output=True` cuts off image generation. ego_dir questions trigger VCoT behavior more than td_path. td_path (44.4%) and td_path_arrow (46.8%) are valid. Remaining RealPT and Mixed s4k results pending.
 
