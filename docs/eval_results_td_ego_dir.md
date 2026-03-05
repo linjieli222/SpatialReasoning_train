@@ -266,6 +266,8 @@ Config: `bagel_mot` (text-only, think=True) | Model: base BAGEL-7B-MoT (no fine-
 
 Config: `understanding_output=True, vae_input=True, think=False` — text-only generation with VAE input encoding matching training.
 
+**Why this config exists:** Models trained with `visual_gen=True` (VCoT, MMCoT, Mixed) encode input images through both VAE and ViT during training. But the standard text-only eval configs (`bagel_mot`, `bagel_mot_nothink`) use `understanding_output=True` which skips VAE input encoding (ViT only). This creates a train-eval mismatch. `bagel_mot_answeronly` fixes this by setting `vae_input=True` to include VAE encoding at eval time, matching the training setup. It still generates text-only output (no image generation loop).
+
 ### VCoT l32 s2k EMA
 
 | Subset | Accuracy |
