@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 complete through s8k (vcot s7k PT2PV2 added). TextCoT think/nothink through s10k (s5k cross-subset results added). MMCoT nothink through s6k. Mixed VCoT+AO through s5k. Baseline PT2PV2 available. Answeronly results: VCoT s2k (td_path, td_path_arrow).
+> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 through s8k (nothink s2k cross-subset, vcot s7k PT2PV2+RealPT added). TextCoT think/nothink through s10k (s5k cross-subset added). MMCoT nothink through s6k. Mixed VCoT+AO through s5k. Baseline PT2PV2 available. Answeronly: VCoT s2k, Mixed s4k.
 
 ## Figures
 
@@ -78,7 +78,7 @@ Training: VCoT with 512x512 output images (latent 32). 8k steps completed.
 | PT2PV2 ego_dir (acc) | -- | -- | -- | -- | -- | -- | 50.4 | -- |
 | SV (acc) | 55.6 | 60.6 | 57.1 | 57.1 | 59.1 | **60.1** | **60.1** | 58.1 |
 | SV (F1) | 52.8 | 60.5 | 55.5 | 56.1 | 58.3 | **59.5** | 58.8 | 56.9 |
-| RealPT path (acc) | -- | -- | -- | 34.5 | -- | -- | -- | -- |
+| RealPT path (acc) | -- | -- | -- | 34.5 | -- | -- | 25.3 | -- |
 | RealPT arrow (acc) | -- | -- | -- | 36.7 | -- | -- | -- | -- |
 
 #### noEMA
@@ -134,7 +134,9 @@ GT sideview images injected as visual thoughts — measures reasoning ability in
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | 56.5 | **74.5** | 34.7 | -- | -- | -- | 0.0 | -- |
-| PT2PV2 (acc) | 43.4 | **61.1** | 25.7 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| PT2PV2 ego_dir (acc) | 43.4 | **61.1** | 25.7 | 0.0 | 0.0 | 0.0 | 0.0 | 0.0 |
+| PT2PV2 td_path (acc) | -- | 43.2 | -- | -- | -- | -- | -- | -- |
+| PT2PV2 td_path_arrow (acc) | -- | 42.7 | -- | -- | -- | -- | -- | -- |
 | SV (acc) | 56.6 | **64.6** | 34.3 | -- | -- | -- | 0.0 | -- |
 | SV (F1) | 49.5 | **63.4** | 44.3 | -- | -- | -- | 0.0 | -- |
 | RealPT path (acc) | 45.4 | **46.6** | 43.1 | 6.9 | -- | -- | -- | -- |
@@ -237,8 +239,8 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 | PT2PV2 ego_dir (acc) | 38.9 | 41.6 | 47.8 | 46.0 | **55.8** | 47.8 | -- | 50.4 | -- | -- |
 | PT2PV2 td_path (acc) | -- | -- | -- | -- | 42.6 | -- | -- | -- | -- | -- |
 | PT2PV2 td_path_arrow (acc) | -- | -- | -- | -- | 49.7 | -- | -- | -- | -- | -- |
-| SV (acc) | 51.5 | 55.1 | 64.1 | 63.6 | 63.6 | **64.1** | **64.1** | 61.6 | 62.6 | -- |
-| SV (F1) | 20.0 | 38.6 | 53.0 | 53.8 | 52.0 | 55.9 | **57.5** | 53.1 | 55.8 | -- |
+| SV (acc) | 51.5 | 55.1 | 64.1 | 63.6 | 63.6 | **64.1** | **64.1** | 61.6 | 62.6 | 62.1 |
+| SV (F1) | 20.0 | 38.6 | 53.0 | 53.8 | 52.0 | 55.9 | **57.5** | 53.1 | 55.8 | 58.8 |
 | RealPT td_path (acc) | -- | -- | -- | -- | 50.6 | -- | -- | -- | -- | -- |
 | RealPT td_path_arrow (acc) | -- | -- | -- | -- | 53.8 | -- | -- | -- | -- | -- |
 
@@ -296,4 +298,10 @@ Config: `understanding_output=True, vae_input=True, think=False` — text-only g
 | PT2PV2 td_ego_dir | 15.9 (invalid) |
 
 > PT2PV2 td_ego_dir result is **invalid** — 79/113 predictions truncated at `<image_start>` because `understanding_output=True` cuts off image generation. ego_dir questions trigger VCoT behavior more than td_path. td_path (44.4%) and td_path_arrow (46.8%) are valid. Remaining RealPT and Mixed s4k results pending.
+
+### Mixed s4k EMA
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2PV2 td_path | 59.8 |
 
