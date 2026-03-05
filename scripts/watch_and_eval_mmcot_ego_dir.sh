@@ -13,7 +13,7 @@ BASE=/gpfs/scrubbed/krishna/linjli/bagel_debug_output/tifa_v3_td_ego_dir_mmcot/m
 PROCESSED=${BASE}/watch_processed.txt
 touch ${PROCESSED}
 
-SUBSETS="AI2ThorPT2PV2_td_ego_dir AI2ThorSV_td_ego_dir"
+SUBSETS="AI2ThorPT2P_td_ego_dir AI2ThorPT2PV2_td_ego_dir AI2ThorSV_td_ego_dir"
 
 run_once() {
     for ckpt_dir in ${BASE}/0*/; do
@@ -36,7 +36,7 @@ run_once() {
 
         # Nothink evals on PT2PV2 and SV
         for subset in ${SUBSETS}; do
-            short_subset=$(echo $subset | sed 's/AI2ThorPT2PV2_/pt2pv2_/; s/AI2ThorSV_/sv_/')
+            short_subset=$(echo $subset | sed 's/AI2ThorPT2P_/pt2p_/; s/AI2ThorPT2PV2_/pt2pv2_/; s/AI2ThorSV_/sv_/')
             short_step=${step#000}; short_step=${short_step#0}
             jobname="eval_mmcot_s${short_step}_ema_nothink_${short_subset}"
             EVAL_JOBID=$(sbatch --parsable --dependency=afterany:${LAST_JOBID} \

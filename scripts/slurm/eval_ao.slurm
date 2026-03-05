@@ -17,6 +17,8 @@ SUBSET=${2:?Usage: sbatch eval_ao.slurm <ckpt_path> <subset>}
 module load conda
 conda activate /gpfs/projects/krishna/envs/thinkmorph
 
+export HF_HOME=/gpfs/scrubbed/linjli/hf_cache
+
 cd /gpfs/home/linjli/source/SpatialReasoning_train
 source scripts/preflight.sh
 preflight_eval_check "${CKPT}" "${SUBSET}" "bagel_mot"

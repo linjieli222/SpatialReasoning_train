@@ -61,11 +61,10 @@ When GT is "B", this matches "B" anywhere in `<think>` reasoning, giving false p
 
 ## Pending Evals
 
-- **VCoT l32 td_ego_dir image-gen PT2P**: s1k-s5k EMA+noEMA resubmitted with 8 GPUs (2-GPU runs timed out at ~11h)
-- **VCoT l32 td_ego_dir image-gen SV**: s6k-s8k running
-- **VCoT l32 td_ego_dir prefill**: s3k EMA submitted (job 67101)
+- **VCoT l32 td_ego_dir prefill**: s3k EMA running (job 67101, 300/329 samples done, ~90.3% acc so far)
+- **VCoT l32 td_ego_dir mse_weight=5 training**: 15k steps (job 67190, running)
+- **VCoT l32 td_ego_dir mse_weight=2 training**: 15k steps (job 67191, running)
 - **VCoT l64 td_path prefill**: s7k EMA+noEMA running (~60% done)
-- **VCoT mse_weight=5 training**: td_ego_dir l32, 15k steps (job 67093)
 - **AO noEMA s12000/s18000**: Perspective_Arrow, Perspective_NoArrow (port collision failures, need resubmission)
 - **TextCoT s3000 EMA, s21000, s24000**: td_path, td_path_arrow (were still running at last check)
 - **VCoT l64 s9000-s15000**: td_path, td_path_arrow, Perspective_Arrow, Perspective_NoArrow (cancelled)
