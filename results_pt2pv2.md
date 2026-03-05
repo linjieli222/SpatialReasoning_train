@@ -56,7 +56,19 @@
 | s7k  | —                        | —                       | 63.22%                    | 63.53%                   | **53.0%**            | 48.0%               |
 | s8k  | 53.98%                   | 50.44%                  | 65.65%                    | 65.35%                   | 53.0%                | 43.0%               |
 | s9k  | —                        | —                       | 65.05%                    | 61.09%                   | **55.0%**            | 46.0%               |
-| s10k | —                        | —                       | 62.92%                    | —                        | —                    | —                   |
+| s10k | —                        | —                       | 62.92%                    | —                        | 64.0%                | —                   |
+
+### td_path (PT2PV2, n=169)
+
+| Step | AO/Think | Nothink |
+|------|----------|---------|
+| s5k  | 47.93%   | 42.60%  |
+
+### td_path_arrow (PT2PV2, n=171)
+
+| Step | AO/Think | Nothink |
+|------|----------|---------|
+| s5k  | 47.95%   | —       |
 
 ## MMCoT (multi-modal chain-of-thought)
 
@@ -144,6 +156,7 @@
 6. **Mixed prevents collapse**: maintains ~70% nothink through s3k-s5k while imagegen stays ~44-55%
 7. **MMCoT steadily improves**: 33.63% → 62.83% nothink over s1k-s5k on PT2PV2, still below mixed (70.80%) but trending up
 8. **TextCoT AO/Think > Nothink**: AO (think=True) consistently beats nothink on PT2PV2 (57.52% vs 46.02% at s4k), showing text thinking helps
-9. **TextCoT peaks at s4k-s5k then declines**: PT2PV2 AO peaks at 57.52% (s4k) then drops to 53.98% (s8k); PT2P v1 at 67.78% (s5k); SV climbs to 55% at s9k
-10. **MMCoT s6k diverges**: PT2PV2 drops to 59.29% (from 62.83%), PT2P v1 peaks at 71.43%, SV drops to 48.0% (from 51.0%) — overfitting to v1 distribution while degrading on debiased/SV
-11. **Prefill v2 s7k ema**: 86.73% on PT2PV2 — upper bound when GT sideview is given
+9. **TextCoT peaks at s4k-s5k then declines**: PT2PV2 AO peaks at 57.52% (s4k) then drops to 53.98% (s8k); PT2P v1 at 67.78% (s5k); SV climbs to 64% at s10k
+10. **TextCoT td_path weak**: s5k AO 47.93%, nothink 42.60% on PT2PV2 — model trained on ego_dir doesn't transfer well to path tasks
+11. **MMCoT s6k diverges**: PT2PV2 drops to 59.29% (from 62.83%), PT2P v1 peaks at 71.43%, SV drops to 48.0% (from 51.0%) — overfitting to v1 distribution while degrading on debiased/SV
+12. **Prefill v2 s7k ema**: 86.73% on PT2PV2 — upper bound when GT sideview is given
