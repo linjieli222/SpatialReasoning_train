@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 through s8k (nothink s2k cross-subset, vcot s7k PT2PV2+RealPT added). TextCoT think/nothink through s10k (s5k cross-subset added). MMCoT nothink through s6k. Mixed VCoT+AO through s5k. Baseline PT2PV2 available. Answeronly: VCoT s2k, Mixed s4k.
+> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 through s8k (nothink s2k cross-subset+RealPT, vcot s7k PT2PV2+RealPT, answeronly s2k RealPT). TextCoT think/nothink through s10k (s4k+s10k cross-subset added). MMCoT nothink through s7k. Mixed VCoT+AO through s6k (s4k-s5k RealPT nothink added). Baseline PT2PV2 available. Answeronly: VCoT s2k (incl. RealPT), Mixed s4k.
 
 ## Figures
 
@@ -141,6 +141,7 @@ GT sideview images injected as visual thoughts — measures reasoning ability in
 | SV (F1) | 49.5 | **63.4** | 44.3 | -- | -- | -- | 0.0 | -- |
 | RealPT path (acc) | 45.4 | **46.6** | 43.1 | 6.9 | -- | -- | -- | -- |
 | RealPT arrow (acc) | **65.8** | **68.4** | -- | 3.8 | -- | -- | -- | -- |
+| *Cross-subset s2k RealPT:* path=46.6%, arrow=68.4% |
 
 #### noEMA
 
@@ -181,7 +182,7 @@ Base dir: `.../tifa_v3_td_ego_dir_vcot_l32/vcot_td_ego_dir_{mse2,mse5}_8gpu/`
 ## Mixed VCoT+AO td_ego_dir
 
 Config: mixed `bagel_mot_vcot` system prompt for both VCoT and AO samples | Base dir: `.../tifa_v3_td_ego_dir_mixed/mixed_vcot_ao_td_ego_dir_8gpu/`
-Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system prompt). Designed to prevent VCoT commitment collapse. Training ongoing.
+Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system prompt). Designed to prevent VCoT commitment collapse. 10k steps, training near completion.
 
 ### Think (`bagel_mot`) — EMA
 
@@ -191,11 +192,13 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 
 ### No-think (`bagel_mot_nothink`) — EMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
-|--------|-------|-------|-------|-------|-------|
-| PT2PV2 ego_dir (acc) | 38.9 | 64.6 | **70.8** | 69.0 | **70.8** |
-| PT2PV2 td_path (acc) | 32.0 | 49.7 | 60.4 | 62.1 | **63.3** |
-| PT2PV2 td_path_arrow (acc) | 33.9 | 50.9 | 60.2 | **63.2** | 61.4 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
+|--------|-------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 38.9 | 64.6 | **70.8** | 69.0 | **70.8** | **72.6** |
+| PT2PV2 td_path (acc) | 32.0 | 49.7 | 60.4 | 62.1 | 63.3 | **65.1** |
+| PT2PV2 td_path_arrow (acc) | 33.9 | 50.9 | 60.2 | **63.2** | 61.4 | 61.4 |
+| RealPT td_path (acc) | -- | -- | -- | 43.7 | 44.8 | **45.4** |
+| RealPT td_path_arrow (acc) | -- | -- | -- | **68.4** | 62.7 | 59.5 |
 
 ### No-think with VAE input (`bagel_mot_nothink_vcot`) — EMA
 
@@ -209,7 +212,7 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 |--------|-------|-------|-------|-------|-------|
 | PT2PV2 (acc) | 50.4 | 43.4 | 44.2 | 52.2 | **54.9** |
 
-> **Key result: Mixed training prevents VCoT collapse.** Think PT2PV2 peaks at **s4k (70.8%)**, nothink at **s3k-s5k (70.8%)** — no collapse unlike pure VCoT. Nothink generalizes to td_path (63.3%) and td_path_arrow (63.2%). nothink_vcot (VAE input) catches up to nothink at **s5k (70.8%)**. VCoT image-gen improves to **s5k (54.9%)** after initial dip.
+> **Key result: Mixed training prevents VCoT collapse.** Think PT2PV2 peaks at **s4k (70.8%)**, nothink ego_dir at **s6k (72.6%)** — no collapse unlike pure VCoT. Nothink td_path peaks at **s6k (65.1%)**, td_path_arrow at **s4k (63.2%)**. RealPT: td_path stable (~44-45%), td_path_arrow peaks at **s4k (68.4%)** then declines (same overfitting pattern). nothink_vcot (VAE input) catches up to nothink at **s5k (70.8%)**. VCoT image-gen improves to **s5k (54.9%)** after initial dip.
 
 ---
 
@@ -224,12 +227,12 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
 | PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 | 63.2 | 65.7 | 65.0 | 62.9 |
 | PT2PV2 ego_dir (acc) | 38.1 | 45.1 | 53.1 | **57.5** | 53.1 | 54.0 | -- | 54.0 | -- | -- |
-| PT2PV2 td_path (acc) | -- | -- | -- | -- | 47.9 | -- | -- | -- | -- | -- |
-| PT2PV2 td_path_arrow (acc) | -- | -- | -- | -- | 48.0 | -- | -- | -- | -- | -- |
+| PT2PV2 td_path (acc) | -- | -- | -- | 45.0 | 47.9 | -- | -- | -- | -- | 46.2 |
+| PT2PV2 td_path_arrow (acc) | -- | -- | -- | 48.0 | 48.0 | -- | -- | -- | -- | 43.9 |
 | SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | **64.6** | 63.1 | **64.6** | 62.1 | 61.1 | 60.1 |
 | SV (F1) | 21.5 | 41.1 | 48.1 | 54.3 | 58.8 | 57.3 | **60.2** | 58.6 | 59.1 | 61.8 |
-| RealPT td_path (acc) | -- | -- | -- | -- | 52.3 | -- | -- | -- | -- | -- |
-| RealPT td_path_arrow (acc) | -- | -- | -- | -- | 51.3 | -- | -- | -- | -- | -- |
+| RealPT td_path (acc) | -- | -- | -- | **55.2** | 52.3 | -- | -- | -- | -- | 44.3 |
+| RealPT td_path_arrow (acc) | -- | -- | -- | **61.4** | 51.3 | -- | -- | -- | -- | 46.8 |
 
 ### No-think (`bagel_mot_nothink`) — EMA
 
@@ -244,7 +247,7 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 | RealPT td_path (acc) | -- | -- | -- | -- | 50.6 | -- | -- | -- | -- | -- |
 | RealPT td_path_arrow (acc) | -- | -- | -- | -- | 53.8 | -- | -- | -- | -- | -- |
 
-> PT2P peaks at **s5k (67.8% think)**, then declines through s10k (62.9%). Nothink PT2P keeps improving to **s10k (66.0%)**. PT2PV2 peaks at **s4k (57.5% think)**. SV peaks at **s5k-s7k (~64.6% think)**. Nothink generalizes to td_path (42.6%), td_path_arrow (49.7%), RealPT path (50.6%), RealPT arrow (53.8%) at s5k.
+> PT2P peaks at **s5k (67.8% think)**, then declines through s10k (62.9%). Nothink PT2P keeps improving to **s10k (66.0%)**. PT2PV2 peaks at **s4k (57.5% think)**. SV peaks at **s5k-s7k (~64.6% think)**. Cross-subset think: RealPT peaks at **s4k** (td_path=55.2%, td_path_arrow=61.4%), declining to 44.3%/46.8% by s10k — same overfitting pattern as AO. PT2PV2 td_path stable (~45-48%) across s4k-s10k.
 
 ---
 
@@ -255,14 +258,14 @@ Training: Multimodal CoT with sideview generation + text reasoning. 10k steps, l
 
 ### No-think (`bagel_mot_nothink`) — EMA
 
-| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 |
-|--------|-------|-------|-------|-------|-------|-------|
-| PT2P (acc) | 48.0 | 63.2 | 66.0 | 69.6 | 68.7 | **71.4** |
-| PT2PV2 (acc) | 33.6 | 39.8 | 52.2 | 59.3 | **62.8** | 59.3 |
-| SV (acc) | 52.0 | 60.1 | 66.2 | 68.7 | **70.2** | 67.2 |
-| SV (F1) | 20.2 | 43.2 | 55.0 | 59.2 | **63.4** | 59.6 |
+| Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 |
+|--------|-------|-------|-------|-------|-------|-------|-------|
+| PT2P (acc) | 48.0 | 63.2 | 66.0 | 69.6 | 68.7 | **71.4** | 69.6 |
+| PT2PV2 (acc) | 33.6 | 39.8 | 52.2 | 59.3 | **62.8** | 59.3 | 59.3 |
+| SV (acc) | 52.0 | 60.1 | 66.2 | 68.7 | **70.2** | 67.2 | 66.7 |
+| SV (F1) | 20.2 | 43.2 | 55.0 | 59.2 | **63.4** | 59.6 | 58.8 |
 
-> MMCoT nothink improves steadily. PT2P peaks at **s6k (71.4%)**, approaching AO levels (80.9%). SV peaks at **s5k (70.2%/F1=63.4)**, then dips at s6k. PT2PV2 peaks at **s5k (62.8%)**. Training ongoing.
+> MMCoT nothink improves steadily. PT2P peaks at **s6k (71.4%)**, approaching AO levels (80.9%). SV peaks at **s5k (70.2%/F1=63.4)**, then declines. PT2PV2 peaks at **s5k (62.8%)**. s7k continues decline on all metrics. Training ongoing.
 
 ---
 
@@ -296,12 +299,15 @@ Config: `understanding_output=True, vae_input=True, think=False` — text-only g
 | PT2PV2 td_path | 44.4 |
 | PT2PV2 td_path_arrow | 46.8 |
 | PT2PV2 td_ego_dir | 15.9 (invalid) |
+| RealPT td_path | 51.7 |
+| RealPT td_path_arrow | 72.8 |
 
-> PT2PV2 td_ego_dir result is **invalid** — 79/113 predictions truncated at `<image_start>` because `understanding_output=True` cuts off image generation. ego_dir questions trigger VCoT behavior more than td_path. td_path (44.4%) and td_path_arrow (46.8%) are valid. Remaining RealPT and Mixed s4k results pending.
+> PT2PV2 td_ego_dir result is **invalid** — 79/113 predictions truncated at `<image_start>`. RealPT td_path_arrow (72.8%) is notably high — exceeds all other models on this subset. RealPT td_path (51.7%) also strong.
 
 ### Mixed s4k EMA
 
 | Subset | Accuracy |
 |--------|----------|
 | PT2PV2 td_path | 59.8 |
+| PT2PV2 td_path_arrow | 63.2 |
 
