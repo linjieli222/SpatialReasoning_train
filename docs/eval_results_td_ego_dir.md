@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-05. AO complete through s10k. VCoT l32 through s8k. TextCoT think/nothink through s10k (PT2PV2 ego_dir complete). MMCoT nothink through s7k (stopped). Mixed VCoT+AO: nothink through s8k, nvcot through s8k, answeronly through s7k (s8k pending). Mixed from VCoT s7k: nothink s1k-s5k (complete, 5k steps). Mixed from VCoT s2k: nothink s1k-s3k, training ongoing. Baseline available.
+> **Data freshness**: Last updated 2026-03-05. AO complete through s10k. VCoT l32 through s8k. TextCoT think/nothink through s10k (PT2PV2 ego_dir complete). MMCoT nothink through s7k (stopped). Mixed VCoT+AO: nothink through s8k, nvcot through s8k, answeronly through s8k (partial, 3/5 subsets). Mixed from VCoT s7k: nothink s1k-s5k, answeronly s5k (4/5 subsets, ego_dir pending). Mixed from VCoT s2k: nothink s1k-s4k, answeronly s3k (4/5 subsets, ego_dir pending), s4k answeronly running. Training ongoing. Baseline available.
 
 ## Figures
 
@@ -79,7 +79,7 @@ Training: VCoT with 512x512 output images (latent 32). 8k steps completed.
 | SV (acc) | 55.6 | 60.6 | 57.1 | 57.1 | 59.1 | **60.1** | **60.1** | 58.1 |
 | SV (F1) | 52.8 | 60.5 | 55.5 | 56.1 | 58.3 | **59.5** | 58.8 | 56.9 |
 | RealPT path (acc) | -- | -- | -- | 34.5 | -- | -- | 25.3 | -- |
-| RealPT arrow (acc) | -- | -- | -- | 36.7 | -- | -- | -- | -- |
+| RealPT arrow (acc) | -- | -- | -- | **36.7** | -- | -- | 27.2 | -- |
 
 #### noEMA
 
@@ -239,7 +239,7 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 | Subset | s4000 | s5000 | s6000 | s7000 | s8000 |
 |--------|-------|-------|-------|-------|-------|
 | PT2PV2 ego_dir (acc) | 58.4 | 69.9 | 69.9 | **70.8** | **70.8** |
-| PT2PV2 td_path (acc) | 59.8 | 62.1 | **66.9** | 63.3 | -- |
+| PT2PV2 td_path (acc) | 59.8 | 62.1 | **66.9** | 63.3 | 65.1 |
 | PT2PV2 td_path_arrow (acc) | **63.2** | 59.1 | 60.2 | 61.4 | -- |
 | RealPT td_path (acc) | 42.5 | **45.4** | **45.4** | 44.8 | -- |
 | RealPT td_path_arrow (acc) | **65.8** | 61.4 | 58.9 | 60.8 | -- |
@@ -269,6 +269,17 @@ Initialized from VCoT l32 s7k EMA (collapsed checkpoint). 5,000 steps. Training 
 
 > s1k very low (recovering from collapsed s7k init), but **s2k recovers dramatically** — ego_dir 19.5%→72.6%. Performance plateaus s2k-s5k: ego_dir stable ~71-73%, td_path peaks at **s3k (64.5%)**, td_path_arrow at **s5k (64.3%)**. RealPT relatively flat (~42-44% path, ~51-54% arrow). Competitive with Mixed scratch at same step counts.
 
+#### Answeronly (`bagel_mot_answeronly`) — s5k EMA
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2PV2 td_path | 62.1 |
+| PT2PV2 td_path_arrow | 64.3 |
+| RealPT td_path | 37.9 |
+| RealPT td_path_arrow | 53.2 |
+
+> Answeronly at s5k: PT2PV2 td_path (62.1%) and td_path_arrow (64.3%) match nothink levels. RealPT notably lower than nothink (37.9% vs 42.5% path, 53.2% vs 50.6% arrow).
+
 ### Mixed from VCoT s2k
 
 Base dir: `.../tifa_v3_td_ego_dir_mixed_from_vcot/mixed_from_vcot_s2k_td_ego_dir_8gpu/`
@@ -276,15 +287,26 @@ Initialized from VCoT l32 s2k EMA (best nothink checkpoint before collapse). 5,0
 
 #### No-think (`bagel_mot_nothink`) — EMA
 
-| Subset | s1000 | s2000 | s3000 |
-|--------|-------|-------|-------|
-| PT2PV2 ego_dir (acc) | 63.7 | 67.3 | **71.7** |
-| PT2PV2 td_path (acc) | 46.7 | 56.8 | **59.8** |
-| PT2PV2 td_path_arrow (acc) | 49.1 | 58.5 | **62.0** |
-| RealPT td_path (acc) | **51.1** | 48.9 | 49.4 |
-| RealPT td_path_arrow (acc) | 70.9 | **75.3** | 72.8 |
+| Subset | s1000 | s2000 | s3000 | s4000 |
+|--------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 63.7 | 67.3 | 71.7 | **73.5** |
+| PT2PV2 td_path (acc) | 46.7 | 56.8 | 59.8 | **61.5** |
+| PT2PV2 td_path_arrow (acc) | 49.1 | 58.5 | **62.0** | 59.1 |
+| RealPT td_path (acc) | **51.1** | 48.9 | 49.4 | 50.6 |
+| RealPT td_path_arrow (acc) | 70.9 | **75.3** | 72.8 | 66.5 |
 
-> MFV2k starts much stronger at s1k than MFV7k (ego_dir 63.7% vs 19.5%) — initializing from VCoT s2k (pre-collapse) preserves text understanding. PT2PV2 ego_dir improves steadily to **s3k (71.7%)**. RealPT td_path_arrow peaks at **s2k (75.3%)** — highest across all models. RealPT td_path (51.1% at s1k) also notably high, suggesting the VCoT s2k init has better cross-domain generalization.
+> MFV2k starts much stronger at s1k than MFV7k (ego_dir 63.7% vs 19.5%) — initializing from VCoT s2k (pre-collapse) preserves text understanding. PT2PV2 ego_dir improves steadily to **s4k (73.5%)** — best MFV2k result. td_path also peaks at **s4k (61.5%)**. td_path_arrow peaks at **s3k (62.0%)**, dips at s4k (59.1%). RealPT td_path_arrow peaks at **s2k (75.3%)** — highest across all models, declining to 66.5% by s4k. RealPT td_path stable ~49-51%.
+
+#### Answeronly (`bagel_mot_answeronly`) — s3k EMA
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2PV2 td_path | 57.4 |
+| PT2PV2 td_path_arrow | 63.2 |
+| RealPT td_path | 43.7 |
+| RealPT td_path_arrow | 68.4 |
+
+> Answeronly at s3k: td_path_arrow (63.2%) matches nothink s3k level (62.0%). RealPT td_path_arrow (68.4%) lower than nothink s2k peak (75.3%) but still strong. ego_dir eval still running.
 
 ---
 
