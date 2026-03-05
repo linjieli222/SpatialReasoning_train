@@ -239,7 +239,7 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 |--------|-------|-------|-------|
 | PT2PV2 ego_dir (acc) | 58.4 | **69.9** | **69.9** |
 | PT2PV2 td_path (acc) | 59.8 | 62.1 | **66.9** |
-| PT2PV2 td_path_arrow (acc) | **63.2** | -- | -- |
+| PT2PV2 td_path_arrow (acc) | **63.2** | 59.1 | -- |
 | RealPT td_path (acc) | 42.5 | -- | -- |
 | RealPT td_path_arrow (acc) | **65.8** | -- | -- |
 
@@ -301,12 +301,12 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
 | PT2P (acc) | 47.7 | 56.5 | 59.9 | 63.5 | 64.7 | 63.2 | 63.5 | 65.3 | -- | **66.0** |
 | PT2PV2 ego_dir (acc) | 38.9 | 41.6 | 47.8 | 46.0 | 55.8 | 47.8 | **58.4** | 50.4 | 54.0 | 54.0 |
-| PT2PV2 td_path (acc) | -- | -- | -- | -- | 42.6 | -- | -- | -- | -- | -- |
-| PT2PV2 td_path_arrow (acc) | -- | -- | -- | -- | 49.7 | -- | -- | -- | -- | -- |
+| PT2PV2 td_path (acc) | -- | -- | -- | -- | 42.6 | -- | **50.9** | -- | -- | -- |
+| PT2PV2 td_path_arrow (acc) | -- | -- | -- | -- | **49.7** | -- | 44.4 | -- | -- | -- |
 | SV (acc) | 51.5 | 55.1 | 64.1 | 63.6 | 63.6 | **64.1** | **64.1** | 61.6 | 62.6 | 62.1 |
 | SV (F1) | 20.0 | 38.6 | 53.0 | 53.8 | 52.0 | 55.9 | **57.5** | 53.1 | 55.8 | 58.8 |
-| RealPT td_path (acc) | -- | -- | -- | -- | 50.6 | -- | -- | -- | -- | -- |
-| RealPT td_path_arrow (acc) | -- | -- | -- | -- | 53.8 | -- | -- | -- | -- | -- |
+| RealPT td_path (acc) | -- | -- | -- | -- | **50.6** | -- | 47.1 | -- | -- | -- |
+| RealPT td_path_arrow (acc) | -- | -- | -- | -- | **53.8** | -- | 45.6 | -- | -- | -- |
 
 > PT2P peaks at **s5k (67.8% think)**, then declines through s10k (62.9%). Nothink PT2P keeps improving to **s10k (66.0%)**. PT2PV2 ego_dir: think peaks at **s4k (57.5%)**, nothink peaks at **s7k (58.4%)**. SV peaks at **s5k-s7k (~64.6% think)**. Cross-subset think: RealPT peaks at **s4k** (td_path=55.2%, td_path_arrow=61.4%), declining to 44.3%/46.8% by s10k — same overfitting pattern as AO. PT2PV2 td_path stable (~45-48%) across s4k-s10k.
 
