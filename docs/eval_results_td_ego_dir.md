@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-05. AO complete through s10k. VCoT l32 through s8k. TextCoT think/nothink through s10k (s7k/s9k/s10k PT2PV2 ego_dir pending). MMCoT nothink through s7k (stopped). Mixed VCoT+AO: nothink through s6k, nvcot s4k-s6k cross-subset, answeronly s4k-s6k (more pending s5k-s8k). Mixed from VCoT s7k: s1k nothink. Mixed from VCoT s2k: training ongoing. Baseline available.
+> **Data freshness**: Last updated 2026-03-05. AO complete through s10k. VCoT l32 through s8k. TextCoT think/nothink through s10k (PT2PV2 ego_dir complete). MMCoT nothink through s7k (stopped). Mixed VCoT+AO: nothink through s6k, nvcot s4k-s6k cross-subset, answeronly s4k-s6k (more pending s5k-s8k). Mixed from VCoT s7k: s1k nothink. Mixed from VCoT s2k: training ongoing. Baseline available.
 
 ## Figures
 
@@ -284,7 +284,7 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
 | PT2P (acc) | 50.8 | 59.6 | 61.1 | 64.4 | **67.8** | 65.7 | 63.2 | 65.7 | 65.0 | 62.9 |
-| PT2PV2 ego_dir (acc) | 38.1 | 45.1 | 53.1 | **57.5** | 53.1 | 54.0 | -- | 54.0 | -- | -- |
+| PT2PV2 ego_dir (acc) | 38.1 | 45.1 | 53.1 | **57.5** | 53.1 | 54.0 | 51.3 | 54.0 | 56.6 | 49.6 |
 | PT2PV2 td_path (acc) | -- | -- | -- | 45.0 | 47.9 | -- | -- | -- | -- | 46.2 |
 | PT2PV2 td_path_arrow (acc) | -- | -- | -- | 48.0 | 48.0 | -- | -- | -- | -- | 43.9 |
 | SV (acc) | 52.0 | 56.6 | 58.6 | 62.6 | **64.6** | 63.1 | **64.6** | 62.1 | 61.1 | 60.1 |
@@ -297,7 +297,7 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 | s8000 | s9000 | s10000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|-------|-------|--------|
 | PT2P (acc) | 47.7 | 56.5 | 59.9 | 63.5 | 64.7 | 63.2 | 63.5 | 65.3 | -- | **66.0** |
-| PT2PV2 ego_dir (acc) | 38.9 | 41.6 | 47.8 | 46.0 | **55.8** | 47.8 | -- | 50.4 | -- | -- |
+| PT2PV2 ego_dir (acc) | 38.9 | 41.6 | 47.8 | 46.0 | 55.8 | 47.8 | **58.4** | 50.4 | 54.0 | 54.0 |
 | PT2PV2 td_path (acc) | -- | -- | -- | -- | 42.6 | -- | -- | -- | -- | -- |
 | PT2PV2 td_path_arrow (acc) | -- | -- | -- | -- | 49.7 | -- | -- | -- | -- | -- |
 | SV (acc) | 51.5 | 55.1 | 64.1 | 63.6 | 63.6 | **64.1** | **64.1** | 61.6 | 62.6 | 62.1 |
@@ -305,7 +305,7 @@ Training: TextCoT with text chain-of-thought reasoning (no image generation). 10
 | RealPT td_path (acc) | -- | -- | -- | -- | 50.6 | -- | -- | -- | -- | -- |
 | RealPT td_path_arrow (acc) | -- | -- | -- | -- | 53.8 | -- | -- | -- | -- | -- |
 
-> PT2P peaks at **s5k (67.8% think)**, then declines through s10k (62.9%). Nothink PT2P keeps improving to **s10k (66.0%)**. PT2PV2 peaks at **s4k (57.5% think)**. SV peaks at **s5k-s7k (~64.6% think)**. Cross-subset think: RealPT peaks at **s4k** (td_path=55.2%, td_path_arrow=61.4%), declining to 44.3%/46.8% by s10k — same overfitting pattern as AO. PT2PV2 td_path stable (~45-48%) across s4k-s10k.
+> PT2P peaks at **s5k (67.8% think)**, then declines through s10k (62.9%). Nothink PT2P keeps improving to **s10k (66.0%)**. PT2PV2 ego_dir: think peaks at **s4k (57.5%)**, nothink peaks at **s7k (58.4%)**. SV peaks at **s5k-s7k (~64.6% think)**. Cross-subset think: RealPT peaks at **s4k** (td_path=55.2%, td_path_arrow=61.4%), declining to 44.3%/46.8% by s10k — same overfitting pattern as AO. PT2PV2 td_path stable (~45-48%) across s4k-s10k.
 
 ---
 
