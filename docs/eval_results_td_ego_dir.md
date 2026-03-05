@@ -155,6 +155,22 @@ GT sideview images injected as visual thoughts — measures reasoning ability in
 
 > **Rise-then-collapse**: Peaks at s2k, collapses by s3k. noEMA collapses completely (0.0%), EMA partially (34.7% PT2P). Same pattern on PT2PV2 and RealPT. VCoT commitment strengthens rapidly between s2k-s3k.
 
+### Answeronly (`bagel_mot_answeronly`)
+
+Text-only generation with VAE input encoding (`vae_input=True`) — matches training setup where input images are encoded via both VAE and ViT.
+
+#### s2k EMA
+
+| Subset | Accuracy |
+|--------|----------|
+| PT2PV2 td_path | 44.4 |
+| PT2PV2 td_path_arrow | 46.8 |
+| PT2PV2 td_ego_dir | 15.9 (invalid) |
+| RealPT td_path | 51.7 |
+| RealPT td_path_arrow | 72.8 |
+
+> PT2PV2 td_ego_dir is **invalid** — 79/113 predictions truncated at `<image_start>`. RealPT td_path_arrow (72.8%) is notably high — exceeds all other models on this subset.
+
 ---
 
 ## VCoT l32 td_ego_dir — mse_weight variants
@@ -211,6 +227,13 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 |
 |--------|-------|-------|-------|-------|-------|
 | PT2PV2 (acc) | 50.4 | 43.4 | 44.2 | 52.2 | **54.9** |
+
+### Answeronly (`bagel_mot_answeronly`) — EMA
+
+| Subset | s4000 |
+|--------|-------|
+| PT2PV2 td_path (acc) | 59.8 |
+| PT2PV2 td_path_arrow (acc) | 63.2 |
 
 > **Key result: Mixed training prevents VCoT collapse.** Think PT2PV2 peaks at **s4k (70.8%)**, nothink ego_dir at **s6k (72.6%)** — no collapse unlike pure VCoT. Nothink td_path peaks at **s6k (65.1%)**, td_path_arrow at **s4k (63.2%)**. RealPT: td_path stable (~44-45%), td_path_arrow peaks at **s4k (68.4%)** then declines (same overfitting pattern). nothink_vcot (VAE input) catches up to nothink at **s5k (70.8%)**. VCoT image-gen improves to **s5k (54.9%)** after initial dip.
 
@@ -304,30 +327,4 @@ Config: `bagel_mot` (text-only, think=True) | Model: base BAGEL-7B-MoT (no fine-
 
 > PT2PV2 td_ego_dir (36.3%) significantly higher than td_path (26.0%) at baseline — ego_dir is an easier task format. td_path and td_path_arrow nearly identical (26.0% vs 27.5%). RealPT arrow (45.6%) easier than path (39.7%).
 
----
-
-## Answeronly eval (`bagel_mot_answeronly`)
-
-Config: `understanding_output=True, vae_input=True, think=False` — text-only generation with VAE input encoding matching training.
-
-**Why this config exists:** Models trained with `visual_gen=True` (VCoT, MMCoT, Mixed) encode input images through both VAE and ViT during training. But the standard text-only eval configs (`bagel_mot`, `bagel_mot_nothink`) use `understanding_output=True` which skips VAE input encoding (ViT only). This creates a train-eval mismatch. `bagel_mot_answeronly` fixes this by setting `vae_input=True` to include VAE encoding at eval time, matching the training setup. It still generates text-only output (no image generation loop).
-
-### VCoT l32 s2k EMA
-
-| Subset | Accuracy |
-|--------|----------|
-| PT2PV2 td_path | 44.4 |
-| PT2PV2 td_path_arrow | 46.8 |
-| PT2PV2 td_ego_dir | 15.9 (invalid) |
-| RealPT td_path | 51.7 |
-| RealPT td_path_arrow | 72.8 |
-
-> PT2PV2 td_ego_dir result is **invalid** — 79/113 predictions truncated at `<image_start>`. RealPT td_path_arrow (72.8%) is notably high — exceeds all other models on this subset. RealPT td_path (51.7%) also strong.
-
-### Mixed s4k EMA
-
-| Subset | Accuracy |
-|--------|----------|
-| PT2PV2 td_path | 59.8 |
-| PT2PV2 td_path_arrow | 63.2 |
 
