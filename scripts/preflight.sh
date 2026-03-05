@@ -70,15 +70,18 @@ _check_model_config() {
     local ckpt_lower
     ckpt_lower=$(echo "$ckpt" | tr '[:upper:]' '[:lower:]')
 
-    if [[ "$model_config" == "bagel_mot_vcot" ]]; then
-        # vcot config should be used for vcot or mmcot checkpoints
-        if echo "$ckpt_lower" | grep -qE '(vcot|mmcot|visual_cot)'; then
-            _pf_pass "Model config: ${model_config} matches VCoT/MMCoT checkpoint"
+    if [[ "$model_config" == "bagel_mot_vcot" || "$model_config" == "bagel_mot_vcot_prefill" ]]; then
+        # vcot/prefill config should be used for vcot or mmcot checkpoints
+        if echo "$ckpt_lower" | grep -qE '(vcot|mmcot|visual_cot|mixed)'; then
+            _pf_pass "Model config: ${model_config} matches VCoT/MMCoT/Mixed checkpoint"
         elif echo "$ckpt_lower" | grep -qE '(answer_only|_ao_|/ao/|textcot|text_cot)'; then
             _pf_fail "Model config mismatch: ${model_config} (image-gen) used with AO/TextCoT checkpoint — should be bagel_mot"
         else
             _pf_warn "Model config: ${model_config} — cannot determine checkpoint type from path, verify manually"
         fi
+    elif [[ "$model_config" == "bagel_mot_answeronly" || "$model_config" == "bagel_mot_nothink" ]]; then
+        # answeronly/nothink configs are valid for any checkpoint type (text-only eval with optional VAE input)
+        _pf_pass "Model config: ${model_config} (text-only eval, valid for any checkpoint)"
     elif [[ "$model_config" == "bagel_mot" ]]; then
         # bagel_mot (text-only) should be used for AO or textcot checkpoints
         if echo "$ckpt_lower" | grep -qE '(answer_only|_ao_|/ao/|textcot|text_cot)'; then

@@ -21,16 +21,16 @@ export HF_HOME=/gpfs/scrubbed/linjli/hf_cache
 
 cd /gpfs/home/linjli/source/SpatialReasoning_train
 source scripts/preflight.sh
-preflight_eval_check "${CKPT}" "${SUBSET}" "bagel_mot"
+preflight_eval_check "${CKPT}" "${SUBSET}" "bagel_mot_answeronly"
 
 cd /gpfs/home/linjli/source/SpatialReasoning_Eval
 
 export THINKMORPH_MODEL_PATH=${CKPT}
 MASTER_PORT=$((29500 + RANDOM % 10000))
 
-echo "=== $(date) Eval: model=${CKPT} subset=${SUBSET} port=${MASTER_PORT} ==="
+echo "=== $(date) Eval: model=${CKPT} subset=${SUBSET} config=bagel_mot_answeronly port=${MASTER_PORT} ==="
 torchrun --nproc-per-node=2 --master_port=${MASTER_PORT} run.py \
-    --model bagel_mot \
+    --model bagel_mot_answeronly \
     --data ${SUBSET} \
     --work-dir ${CKPT}/eval
 echo "=== $(date) Done (exit $?) ==="
