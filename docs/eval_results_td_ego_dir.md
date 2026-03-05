@@ -2,7 +2,7 @@
 
 Back to [Eval Results Index](eval_results.md)
 
-> **Data freshness**: Last updated 2026-03-04. AO complete through s10k. VCoT l32 through s8k (nothink s2k cross-subset+RealPT, vcot s7k PT2PV2+RealPT, answeronly s2k RealPT). TextCoT think/nothink through s10k (s4k+s10k cross-subset added). MMCoT nothink through s7k (stopped). Mixed VCoT+AO through s6k (s4k-s5k RealPT nothink added). Mixed from VCoT (s7k, s2k) training started. Baseline PT2PV2 available. Answeronly: VCoT s2k (incl. RealPT), Mixed s4k.
+> **Data freshness**: Last updated 2026-03-05. AO complete through s10k. VCoT l32 through s8k (nothink s2k cross-subset+RealPT, vcot s7k PT2PV2+RealPT, answeronly s2k RealPT). TextCoT think/nothink through s10k (s4k+s10k cross-subset). MMCoT nothink through s7k (stopped; s5k cross-subset added). Mixed VCoT+AO through s6k. Mixed from VCoT s7k: s1k nothink available. Mixed from VCoT s2k: training started. Baseline PT2PV2 available.
 
 ## Figures
 
@@ -248,7 +248,17 @@ Same data mix as Mixed (50% VCoT + 50% AO with VCoT system prompt), but initiali
 Base dir: `.../tifa_v3_td_ego_dir_mixed_from_vcot/mixed_from_vcot_s7k_td_ego_dir_8gpu/`
 Initialized from VCoT l32 s7k EMA. 5,000 steps. Training ongoing.
 
-*(Evals pending)*
+#### No-think (`bagel_mot_nothink`) — EMA
+
+| Subset | s1000 |
+|--------|-------|
+| PT2PV2 ego_dir (acc) | 19.5 |
+| PT2PV2 td_path (acc) | 25.4 |
+| PT2PV2 td_path_arrow (acc) | 22.8 |
+| RealPT td_path (acc) | 14.4 |
+| RealPT td_path_arrow (acc) | 26.6 |
+
+> s1k results are very low — model is still recovering from VCoT s7k initialization (which had fully collapsed to image-gen-only behavior by s7k).
 
 ### Mixed from VCoT s2k
 
@@ -304,11 +314,15 @@ Training: Multimodal CoT with sideview generation + text reasoning. Latent 32 (5
 | Subset | s1000 | s2000 | s3000 | s4000 | s5000 | s6000 | s7000 |
 |--------|-------|-------|-------|-------|-------|-------|-------|
 | PT2P (acc) | 48.0 | 63.2 | 66.0 | 69.6 | 68.7 | **71.4** | 69.6 |
-| PT2PV2 (acc) | 33.6 | 39.8 | 52.2 | 59.3 | **62.8** | 59.3 | 59.3 |
+| PT2PV2 ego_dir (acc) | 33.6 | 39.8 | 52.2 | 59.3 | **62.8** | 59.3 | 59.3 |
+| PT2PV2 td_path (acc) | -- | -- | -- | -- | 34.9 | -- | -- |
+| PT2PV2 td_path_arrow (acc) | -- | -- | -- | -- | 36.3 | -- | -- |
 | SV (acc) | 52.0 | 60.1 | 66.2 | 68.7 | **70.2** | 67.2 | 66.7 |
 | SV (F1) | 20.2 | 43.2 | 55.0 | 59.2 | **63.4** | 59.6 | 58.8 |
+| RealPT td_path (acc) | -- | -- | -- | -- | 44.3 | -- | -- |
+| RealPT td_path_arrow (acc) | -- | -- | -- | -- | 57.6 | -- | -- |
 
-> MMCoT nothink improves steadily. PT2P peaks at **s6k (71.4%)**, approaching AO levels (80.9%). SV peaks at **s5k (70.2%/F1=63.4)**, then declines. PT2PV2 peaks at **s5k (62.8%)**. s7k continues decline on all metrics. Training stopped — past peak.
+> MMCoT nothink improves steadily. PT2P peaks at **s6k (71.4%)**, approaching AO levels (80.9%). SV peaks at **s5k (70.2%/F1=63.4)**, then declines. PT2PV2 ego_dir peaks at **s5k (62.8%)**. Cross-subset at s5k: td_path (34.9%) and td_path_arrow (36.3%) much weaker than ego_dir — 25-28pp gap. RealPT decent (44.3/57.6%). Training stopped — past peak.
 
 ---
 
