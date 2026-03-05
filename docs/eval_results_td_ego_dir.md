@@ -239,8 +239,8 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 |--------|-------|-------|-------|
 | PT2PV2 ego_dir (acc) | 58.4 | **69.9** | **69.9** |
 | PT2PV2 td_path (acc) | 59.8 | 62.1 | **66.9** |
-| PT2PV2 td_path_arrow (acc) | **63.2** | 59.1 | -- |
-| RealPT td_path (acc) | 42.5 | -- | -- |
+| PT2PV2 td_path_arrow (acc) | **63.2** | 59.1 | 60.2 |
+| RealPT td_path (acc) | 42.5 | **45.4** | -- |
 | RealPT td_path_arrow (acc) | **65.8** | -- | -- |
 
 > **Key result: Mixed training prevents VCoT collapse.** Think PT2PV2 peaks at **s4k (70.8%)**, nothink ego_dir at **s6k (72.6%)** — no collapse unlike pure VCoT. Nothink td_path peaks at **s6k (65.1%)**, td_path_arrow at **s4k (63.2%)**. RealPT: td_path stable (~44-45%), td_path_arrow peaks at **s4k (68.4%)** then declines (same overfitting pattern). nothink_vcot (VAE input) ego_dir peaks at **s5k (70.8%)**, td_path at **s6k (65.1%)**; RealPT td_path flat at ~42.5%, td_path_arrow strong at s4k (62.0%). Answeronly ego_dir rises to **s6k (69.9%)**, matching nothink_vcot. VCoT image-gen improves to **s5k (54.9%)** after initial dip.
@@ -258,15 +258,15 @@ Initialized from VCoT l32 s7k EMA. 5,000 steps. Training ongoing.
 
 #### No-think (`bagel_mot_nothink`) — EMA
 
-| Subset | s1000 |
-|--------|-------|
-| PT2PV2 ego_dir (acc) | 19.5 |
-| PT2PV2 td_path (acc) | 25.4 |
-| PT2PV2 td_path_arrow (acc) | 22.8 |
-| RealPT td_path (acc) | 14.4 |
-| RealPT td_path_arrow (acc) | 26.6 |
+| Subset | s1000 | s2000 |
+|--------|-------|-------|
+| PT2PV2 ego_dir (acc) | 19.5 | **72.6** |
+| PT2PV2 td_path (acc) | 25.4 | **63.3** |
+| PT2PV2 td_path_arrow (acc) | 22.8 | **61.4** |
+| RealPT td_path (acc) | 14.4 | **43.7** |
+| RealPT td_path_arrow (acc) | 26.6 | **53.2** |
 
-> s1k results are very low — model is still recovering from VCoT s7k initialization (which had fully collapsed to image-gen-only behavior by s7k).
+> s1k very low (model recovering from collapsed s7k init), but **s2k recovers dramatically** — ego_dir jumps from 19.5% to 72.6%, matching Mixed scratch s6k levels. Cross-subset td_path (63.3%) also competitive with Mixed scratch.
 
 ### Mixed from VCoT s2k
 
