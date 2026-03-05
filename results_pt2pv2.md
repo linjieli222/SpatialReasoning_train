@@ -68,7 +68,7 @@
 
 | Step | AO/Think | Nothink |
 |------|----------|---------|
-| s5k  | 47.95%   | —       |
+| s5k  | 47.95%   | 49.71%  |
 
 ## MMCoT (multi-modal chain-of-thought)
 
