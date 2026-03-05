@@ -6,7 +6,7 @@
 #   */2 * * * * /gpfs/home/linjli/source/SpatialReasoning_train/scripts/watch_and_eval_mmcot.sh >> /gpfs/scrubbed/krishna/linjli/bagel_debug_output/watch_mmcot.log 2>&1
 
 TRAIN_DIR=/gpfs/home/linjli/source/SpatialReasoning_train
-CONVERT_SLURM=${TRAIN_DIR}/scripts/slurm/convert_ego_dir.slurm
+CONVERT_SLURM=${TRAIN_DIR}/scripts/slurm/convert_ema_only.slurm
 EVAL_NOTHINK_SLURM=${TRAIN_DIR}/scripts/slurm/eval_nothink.slurm
 
 SUBSET=AI2ThorPT2PV2_td_ego_dir
@@ -28,7 +28,7 @@ for ckpt_dir in ${MMCOT_BASE}/0*/; do
 
     echo "=== $(date) [MMCoT] New checkpoint: ${step} ==="
 
-    # Conversion job (keeps visual_gen for MMCoT)
+    # Conversion job (EMA only, keeps visual_gen for MMCoT)
     CONV_JOBID=$(sbatch --parsable --job-name=conv_mmcot_s${step#000} \
         ${CONVERT_SLURM} ${MMCOT_BASE} ${step})
     echo "  Conversion job: ${CONV_JOBID}"
