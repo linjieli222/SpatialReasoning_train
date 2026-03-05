@@ -236,13 +236,13 @@ Training: 50% VCoT (sideview generation) + 50% AO (answer-only with VCoT system 
 
 ### Answeronly (`bagel_mot_answeronly`) — EMA
 
-| Subset | s4000 | s5000 | s6000 | s7000 |
-|--------|-------|-------|-------|-------|
-| PT2PV2 ego_dir (acc) | 58.4 | 69.9 | 69.9 | **70.8** |
-| PT2PV2 td_path (acc) | 59.8 | 62.1 | **66.9** | 63.3 |
-| PT2PV2 td_path_arrow (acc) | **63.2** | 59.1 | 60.2 | 61.4 |
-| RealPT td_path (acc) | 42.5 | **45.4** | **45.4** | 44.8 |
-| RealPT td_path_arrow (acc) | **65.8** | 61.4 | 58.9 | 60.8 |
+| Subset | s4000 | s5000 | s6000 | s7000 | s8000 |
+|--------|-------|-------|-------|-------|-------|
+| PT2PV2 ego_dir (acc) | 58.4 | 69.9 | 69.9 | **70.8** | **70.8** |
+| PT2PV2 td_path (acc) | 59.8 | 62.1 | **66.9** | 63.3 | -- |
+| PT2PV2 td_path_arrow (acc) | **63.2** | 59.1 | 60.2 | 61.4 | -- |
+| RealPT td_path (acc) | 42.5 | **45.4** | **45.4** | 44.8 | -- |
+| RealPT td_path_arrow (acc) | **65.8** | 61.4 | 58.9 | 60.8 | -- |
 
 > **Key result: Mixed training prevents VCoT collapse.** Think PT2PV2 peaks at **s4k (70.8%)**. Nothink ego_dir peaks at **s7k (73.5%)**, td_path at **s8k (65.7%)**, td_path_arrow at **s8k (64.3%)** — no collapse through s8k. RealPT: td_path peaks at **s8k (46.0%)**, td_path_arrow peaks at **s4k (68.4%)** then declines (overfitting pattern). nothink_vcot ego_dir plateaus at **s7k-s8k (71.7%)**, td_path stable at **65.1%** (s6k-s8k), td_path_arrow at **s8k (63.2%)**. Answeronly ego_dir peaks at **s7k (70.8%)**. VCoT image-gen improves to **s5k (54.9%)** after initial dip.
 
